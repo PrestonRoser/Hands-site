@@ -98,6 +98,19 @@ html, body {
 
   a.btn-link { text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: rgb(var(--color-brand-600)); /* Uses your site’s blue tone */
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   /* === Reusable icon chip button (moved from Navbar) === */
   .icon-btn {
     width: 38px;
