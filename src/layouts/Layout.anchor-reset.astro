@@ -1,6 +1,7 @@
 ---
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import "../styles/global.css";
 const { title = "DNA Assembly Education", description = "Hands-on STEM: DNA/mRNA learning kit and classroom resources" } = Astro.props;
 ---
 <html lang="en">
@@ -38,5 +39,44 @@ const { title = "DNA Assembly Education", description = "Hands-on STEM: DNA/mRNA
     </footer>
   </body>
 </html>
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+const { title = "DNA Assembly Education", description = "Hands-on STEM: DNA/mRNA learning kit and classroom resources" } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+      /* Minimal anchor reset to avoid old-style underlines site-wide.
+         Leave component buttons/links to style themselves. */
+      a { text-decoration: none; color: inherit; }
+    </style>
+  </head>
+  <body>
+    <div class="nav-wrap">
+      <div class="container">
+        <Navbar />
+      </div>
+    </div>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="section" style="border-top:1px solid var(--border)">
+      <div class="container">
+        <Footer />
+      </div>
+    </footer>
+  </body>
+</html>
 
