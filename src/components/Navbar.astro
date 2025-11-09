@@ -1,10 +1,4 @@
 ---
-/**
- * Navbar with brand, center nav buttons, and actions.
- * - Adds Email + Instagram ghost buttons (business socials)
- * - Keeps Etsy action + mobile menu
- * - Two-row layout at <= 1400px to avoid overlap
- */
 const LINKS = [
   { href: "/", label: "Home" },
   { href: "/product", label: "Product" },
@@ -17,17 +11,9 @@ const LINKS = [
 ];
 
 const path = Astro.url.pathname;
-
-// Business contact constants (avoid ReferenceError in templates)
 const email = 'sproutforged@gmail.com';
 const instagram = 'https://instagram.com/sproutforged';
-
 const etsy = "https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-stem-learning-kit?etsrc=sdt";
-const bizEmail = "mailto:sproutforged@gmail.com";
-const bizInsta = "https://instagram.com/sproutforged";
-
-// Prefer WEBP logo for modern browsers (small, lossless).
-// Place file at /public/hands-logo-lossless.webp
 const logoPath = "/images/hands-logo-lossless.webp";
 ---
 
@@ -41,7 +27,7 @@ const logoPath = "/images/hands-logo-lossless.webp";
       </a>
     </div>
 
-    <!-- Center navigation -->
+    <!-- Center navigation (hidden on mobile) -->
     <nav class="nav-center" aria-label="Primary">
       {LINKS.map((l) => (
         <a
@@ -49,36 +35,35 @@ const logoPath = "/images/hands-logo-lossless.webp";
           href={l.href}
           aria-current={path === l.href ? "page" : undefined}
         >
-          <strong> {l.label} </strong>
+          {l.label}
         </a>
       ))}
     </nav>
 
     <!-- Actions -->
-
-    <!-- Etsy icon -->
     <div class="nav-actions">
-      <a class="icon-btn focus-ring" href={etsy} target="_blank" rel="noopener" aria-label="View on Etsy" title="View on Etsy">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M6 6l-2-2H2"/>
-        </svg>
-      </a>
+      <!-- Desktop icons (hidden on small screens) -->
+      <div class="desktop-icons">
+        <a class="icon-btn focus-ring" href={etsy} target="_blank" rel="noopener" aria-label="View on Etsy" title="View on Etsy">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M6 6l-2-2H2"/>
+          </svg>
+        </a>
 
-      <!-- Email icon -->
-      <a class="icon-btn focus-ring" href={"mailto:" + email} aria-label="Email">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M4 6h16v12H4z"/><path d="M22 6l-10 7L2 6"/>
-        </svg>
-      </a>
+        <a class="icon-btn focus-ring" href={"mailto:" + email} aria-label="Email" title="Email">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 6h16v12H4z"/><path d="M22 6l-10 7L2 6"/>
+          </svg>
+        </a>
 
-      <!-- Instagram icon -->
-      <a class="icon-btn focus-ring" href={instagram} target="_blank" rel="noopener" aria-label="Instagram">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="3.2"/><circle cx="17" cy="7" r="1"/>
-        </svg>
-      </a>
+        <a class="icon-btn focus-ring" href={instagram} target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="3.2"/><circle cx="17" cy="7" r="1"/>
+          </svg>
+        </a>
+      </div>
 
-      <!-- Menu icon -->
+      <!-- Mobile menu toggle -->
       <details class="menu">
         <summary class="icon-btn focus-ring" aria-label="Open menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -92,18 +77,19 @@ const logoPath = "/images/hands-logo-lossless.webp";
             </a>
           ))}
           <hr class="separator" />
-          <a role="menuitem" href={etsy} target="_blank" rel="noopener">Etsy</a>
+          <a role="menuitem" href={etsy} target="_blank" rel="noopener">Shop on Etsy</a>
+          <a role="menuitem" href={"mailto:" + email}>Email Us</a>
+          <a role="menuitem" href={instagram} target="_blank" rel="noopener">Instagram</a>
         </div>
       </details>
     </div>
   </div>
+  
   <script>
   document.addEventListener('click', (event) => {
     const menu = document.querySelector('.menu');
     if (!menu) return;
-
-    // If menu is open and click is outside the <details> element, close it
-    if (menu.hasAttribute('open') && !menu.contains(event.target)) {
+    if (menu.hasAttribute('open') && !menu.contains(event.target as Node)) {
       menu.removeAttribute('open');
     }
   });
@@ -111,76 +97,104 @@ const logoPath = "/images/hands-logo-lossless.webp";
 </header>
 
 <style>
-  :root { --nav-gap: 1.25rem; }
+  .nav-root {
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid rgba(59,124,255,0.15);
+  }
+
   .nav-inner {
     max-width: 1180px;
     margin: 0 auto;
     padding: 0 1rem;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "brand center actions";
+    display: flex;
     align-items: center;
-    height: 64px;
-    gap: 0;
-    min-width: 0;
+    justify-content: space-between;
+    min-height: 64px;
+    gap: 1rem;
   }
 
-  .brand { grid-area: brand; }
+  /* Brand styling */
   .brand a {
-    display: inline-flex; align-items: center; gap: .5rem;
+    display: inline-flex; 
+    align-items: center; 
+    gap: .5rem;
     font-family: var(--font-display);
     font-weight: 800;
-    color: var(--brand-text, #1e3a8a);
+    color: #1e3a8a;
     font-size: 1.125rem;
     letter-spacing: 0.2px;
     text-decoration: none;
     white-space: nowrap;
   }
+  
   .brand .logo {
-    height: 22px; width: 22px;
+    height: 22px; 
+    width: 22px;
     border-radius: .5rem;
     box-shadow: 0 0 0 1px rgba(31,75,184,.08);
+    flex-shrink: 0;
   }
 
+  /* Center navigation - hidden on mobile */
   .nav-center {
-    grid-area: center;
-    display: flex;
-    justify-content: center;
+    display: none;
     align-items: center;
-    gap: var(--nav-gap);
-    min-width: 0;
-    font-weight: bold;
+    gap: .5rem;
   }
-
-  .nav-actions {
-    grid-area: actions;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-self: end;
-  }
-
-  /* Show two rows before crowding */
-  @media (max-width: 1400px) {
-    .nav-inner {
-      grid-template-columns: auto 1fr auto;
-      grid-template-areas:
-        "brand . actions"
-        "center center center";
-      row-gap: 6px;
-      height: auto;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+  
+  @media (min-width: 940px) {
+    .nav-center {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      max-width: 800px;
+      margin: 0 auto;
     }
   }
 
-  /* Mobile: hide center links */
-  @media (max-width: 940px) {
-    .nav-inner { grid-template-areas: "brand . actions"; }
-    .nav-center { display: none; }
+  /* Action buttons */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .menu { position: relative; }
+  /* Desktop icons - hidden on mobile */
+  .desktop-icons {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .desktop-icons {
+      display: flex;
+    }
+  }
+
+  /* Mobile menu */
+  .menu { 
+    position: relative;
+    display: block;
+  }
+  
+  @media (min-width: 940px) {
+    .menu {
+      display: none;
+    }
+  }
+  
+  .menu summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  
+  .menu summary::marker,
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  
   .sheet {
     position: absolute;
     right: 0;
@@ -190,14 +204,46 @@ const logoPath = "/images/hands-logo-lossless.webp";
     border-radius: 14px;
     box-shadow: var(--shadow);
     min-width: 240px;
+    max-width: 280px;
     overflow: hidden;
     display: none;
     padding: 0.25rem 0;
     z-index: 100;
   }
-  details[open] .sheet { display: flex; flex-direction: column; }
-  .sheet a { display: block; padding: 0.85rem 1rem; color: var(--text); text-decoration: none; white-space: nowrap; }
-  .sheet a + a { border-top: 1px solid var(--border); }
-  .separator { border: 0; height: 1px; background: var(--border); margin: .25rem 0; }
+  
+  details[open] .sheet { 
+    display: flex; 
+    flex-direction: column; 
+  }
+  
+  .sheet a { 
+    display: block; 
+    padding: 0.85rem 1rem; 
+    color: var(--text); 
+    text-decoration: none; 
+    white-space: nowrap;
+    transition: background-color 0.15s ease;
+  }
+  
+  .sheet a:hover {
+    background: rgb(230,240,255);
+    color: rgb(31,75,184);
+  }
+  
+  .sheet a[aria-current="page"] {
+    background: rgb(219,234,254);
+    color: rgb(29,78,216);
+    font-weight: 600;
+  }
+  
+  .sheet a + a { 
+    border-top: 1px solid var(--border); 
+  }
+  
+  .separator { 
+    border: 0; 
+    height: 1px; 
+    background: var(--border); 
+    margin: .25rem 0; 
+  }
 </style>
-
