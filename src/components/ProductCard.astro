@@ -2,47 +2,53 @@
 const etsy = "https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-stem-learning-kit?etsrc=sdt";
 ---
 <section class="section" style="padding-top:0">
-  <div style="display:flex;justify-content:center">
-    <div style="display:grid;grid-template-columns:repeat(2,minmax(260px, 420px));gap:1.25rem">
+  <div class="product-cards-wrapper">
+    <div class="product-cards-grid">
 
       <!-- Card 1: Current product (entire card clickable) -->
-      <div class="card card-hover" style="position:relative;text-align:center;padding:1.25rem 1.25rem 1.5rem">
+      <div class="card card-hover product-card">
         <!-- Stretched link overlay -->
-        <a href="/product" aria-label="View DNA Assembly Kit" style="position:absolute;inset:0;border-radius:inherit;z-index:1"></a>
+        <a href="/product" aria-label="View DNA Assembly Kit" class="card-link"></a>
 
-        <div style="width:100%;aspect-ratio:1/1;border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fafbff">
-          <img src="/images/assembled-student-kit.png" alt="Assembled student DNA and RNA kit" style="max-width:84%;height:auto;object-fit:contain;transition:filter .2s ease, transform .2s ease;" />
+        <div class="product-image-wrapper">
+          <img src="/images/assembled-student-kit.png" alt="Assembled student DNA and RNA kit" class="product-image" />
         </div>
 
-        <h2 class="h2" style="margin:1rem 0 .25rem">Featured product: DNA Assembly Kit</h2>
-        <p class="muted" style="margin:.25rem 0 0">Color-coded, reusable parts to model base pairing, antiparallel strands, and transcription.</p>
-        <ul class="muted" style="margin:.35rem auto 0; text-align:left; max-width:440px">
-          <li>• Teacher ready activities, 15-45 minutes</li>
-          <li>• NGSS aligned concepts</li>
-          <li>• Classroom safe and durable</li>
-        </ul>
+        <div class="product-content">
+          <h2 class="product-title">Featured product: DNA Assembly Kit</h2>
+          <p class="product-description">Color-coded, reusable parts to model base pairing, antiparallel strands, and transcription.</p>
+          <ul class="product-features">
+            <li>• Teacher ready activities, 15-45 minutes</li>
+            <li>• NGSS aligned concepts</li>
+            <li>• Classroom safe and durable</li>
+          </ul>
 
-        <!-- Buttons sit above the overlay so they are still clickable as buttons -->
-        <div style="position:relative;z-index:2;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem">
-          <a class="btn-primary" href="/product">View product</a>
-          <a class="btn-link" href="/contact">Request a quote</a>
+          <!-- Buttons sit above the overlay so they are still clickable -->
+          <div class="product-actions">
+            <a class="btn-primary" href="/product">View product</a>
+            <a class="btn-link" href="/contact">Request a quote</a>
+          </div>
         </div>
       </div>
 
       <!-- Card 2: Coming soon -->
-      <div class="card card-hover" style="position:relative;text-align:center;padding:1.25rem 1.25rem 1.5rem">
-        <a href="/venture" aria-label="See upcoming kits on Venture page" style="position:absolute;inset:0;border-radius:inherit;z-index:1"></a>
+      <div class="card card-hover product-card">
+        <a href="/venture" aria-label="See upcoming kits on Venture page" class="card-link"></a>
 
-        <div style="width:100%;aspect-ratio:1/1;border:1px dashed var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;background:#f6f7fb">
-          <div class="muted" style="font-weight:600">New kits in development</div>
+        <div class="product-image-wrapper product-placeholder">
+          <div class="placeholder-content">
+            <span class="placeholder-text">New kits in development</span>
+          </div>
         </div>
 
-        <h2 class="h2" style="margin:1rem 0 .25rem">More Hands kits coming</h2>
-        <p class="muted" style="margin:.25rem 0 0">We are prototyping additional tactile STEM kits. Follow along and join our pilots.</p>
+        <div class="product-content">
+          <h2 class="product-title">More Hands kits coming</h2>
+          <p class="product-description">We are prototyping additional tactile STEM kits. Follow along and join our pilots.</p>
 
-        <div style="position:relative;z-index:2;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem">
-          <a class="btn-primary" href="/venture">View roadmap</a>
-          <a class="btn-link" href="/contact">Partner with us</a>
+          <div class="product-actions">
+            <a class="btn-primary" href="/venture">View roadmap</a>
+            <a class="btn-link" href="/contact">Partner with us</a>
+          </div>
         </div>
       </div>
 
@@ -51,17 +57,169 @@ const etsy = "https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-ste
 </section>
 
 <style>
-  /* Scoped hover/tint effect for both cards */
-  .card-hover { position: relative; overflow: hidden; }
-  .card-hover::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(38,103,255,0.08), rgba(172,234,211,0.10));
-    opacity: 0;
-    transition: opacity .2s ease;
-    border-radius: inherit;
+  .product-cards-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
-  .card-hover:hover::after { opacity: 1; }
-  .card-hover:hover img { filter: saturate(1.05) hue-rotate(6deg) contrast(1.02); transform: translateY(-1px); }
-</style>
 
+  .product-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  /* Two columns only on larger screens */
+  @media (min-width: 768px) {
+    .product-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .product-cards-grid {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  }
+
+  /* Product card styling */
+  .product-card {
+    position: relative;
+    text-align: center;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 480px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    .product-card {
+      padding: 1.25rem;
+      min-height: 520px;
+    }
+  }
+
+  /* Stretched link */
+  .card-link {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  /* Image wrapper */
+  .product-image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafbff;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+
+  .product-image {
+    max-width: 84%;
+    height: auto;
+    object-fit: contain;
+    transition: filter .2s ease, transform .2s ease;
+  }
+
+  .product-placeholder {
+    background: #f6f7fb;
+    border-style: dashed;
+  }
+
+  .placeholder-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .placeholder-text {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  /* Product content */
+  .product-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+  }
+
+  .product-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+    line-height: 1.2;
+    margin: 0 0 0.25rem 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .product-description {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .product-features {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    text-align: left;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .product-features {
+      font-size: 0.95rem;
+    }
+  }
+
+  .product-features li {
+    margin: 0.25rem 0;
+    word-wrap: break-word;
+  }
+
+  /* Actions */
+  .product-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: auto;
+    padding-top: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .product-actions {
+      padding-top: 0.9rem;
+    }
+  }
+
+  /* Hover effects */
+  .card-hover:hover img {
+    filter: saturate(1.05) hue-rotate(6deg) contrast(1.02);
+    transform: translateY(-1px);
+  }
+</style>

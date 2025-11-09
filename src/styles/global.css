@@ -82,12 +82,22 @@ html, body {
   }
   
   @media (min-width: 768px) {
-    .grid-2 { gap: 1.75rem; }
+    .grid-2 { 
+      gap: 1.75rem;
+      grid-template-columns: 1fr 1fr;
+    }
   }
   
   @media (min-width: 960px) {
     .grid-2 { 
       grid-template-columns: 1.15fr .85fr;
+    }
+  }
+
+  /* Force single column on small screens */
+  @media (max-width: 767px) {
+    .grid-2 {
+      grid-template-columns: 1fr !important;
     }
   }
 
