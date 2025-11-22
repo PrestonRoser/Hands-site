@@ -1,7 +1,7 @@
 ---
 const year = new Date().getFullYear();
 const email = 'sproutforged@gmail.com';
-const instagram = 'https://instagram.com/sproutforged';
+const instagram = 'https://www.instagram.com/hand.slearning/';
 const etsy = 'https://sproutforge3d.etsy.com';
 const logoPath = "/images/hands-logo-lossless.webp";
 ---
@@ -32,26 +32,35 @@ const logoPath = "/images/hands-logo-lossless.webp";
       <p class="footer-contact-title">Contact</p>
       <div class="footer-contact-actions">
         <a class="btn-ghost focus-ring" href={"mailto:" + email} aria-label="Email">
-          <!-- mail icon -->
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-            <path d="M4 6h16v12H4z"/><path d="M22 6l-10 7L2 6"/>
-          </svg>
+          <img
+            src="/images/email.svg"
+            alt="Email icon"
+            width="18"
+            height="18"
+            loading="lazy"
+          />
           <span>{email}</span>
         </a>
 
         <a class="btn-ghost focus-ring" href={instagram} target="_blank" rel="noopener" aria-label="Instagram">
-          <!-- instagram icon -->
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="3.2"/><circle cx="17" cy="7" r="1"/>
-          </svg>
-          <span>@sproutforged</span>
+          <img
+            src="/images/instagram.svg"
+            alt="Instagram icon"
+            width="18"
+            height="18"
+            loading="lazy"
+          />
+          <span>@hand.slearning</span>
         </a>
 
         <a class="btn-ghost focus-ring" href={etsy} target="_blank" rel="noopener" aria-label="Etsy">
-          <!-- cart icon -->
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M6 6l-2-2H2"/>
-          </svg>
+          <img
+            src="/images/cart.svg"
+            alt="Cart icon"
+            width="18"
+            height="18"
+            loading="lazy"
+          />
           <span>Etsy store</span>
         </a>
       </div>

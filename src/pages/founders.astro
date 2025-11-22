@@ -191,17 +191,73 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
       </div>
-
-      <!-- Business socials (bottom block) -->
-      <div style="margin-top:1rem; margin-left:3rem;">
-        <p class="kicker">SproutForge3D LLC</p>
-        <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-          <a class="btn-primary" href="mailto:sproutforged@gmail.com">sproutforged@gmail.com</a>
-          <a class="btn-primary" href="https://instagram.com/sproutforged" target="_blank" rel="noopener">@sproutforged</a>
-          <a class="btn-primary" href="https://sproutforge3d.etsy.com" target="_blank" rel="noopener">Etsy store</a>
-        </div>
-      </div>
     </div>
   </section>
 </Layout>
 
+<style>
+  /* Responsive founder story cards */
+  .founder-quote.prominent {
+    background: linear-gradient(180deg, #f5f7fb 0%, #e9edf7 100%);
+    border-left: 5px solid #2563eb;
+    border-radius: 14px;
+    padding: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #1e293b;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 100%; /* Allow it to fill available space */
+  }
+
+  .founder-quote.prominent p + p {
+    margin-top: 1rem;
+  }
+
+  /* Tablet and up: more padding and larger text */
+  @media (min-width: 768px) {
+    .founder-quote.prominent {
+      padding: 1.8rem 2rem;
+      font-size: 1.1rem;
+      margin: 2rem 0;
+    }
+  }
+
+  /* Desktop: constrain width but keep flexible */
+  @media (min-width: 1024px) {
+    .founder-quote.prominent {
+      max-width: 820px;
+    }
+  }
+
+  /* Adjust person layout for mobile */
+  .person {
+    display: flex;
+    flex-direction: column; /* Stack on mobile */
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* Desktop: side-by-side layout */
+  @media (min-width: 768px) {
+    .person {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  /* Make headshot smaller on mobile */
+  .headshot {
+    width: 120px;
+    height: 120px;
+    align-self: center; /* Center on mobile */
+  }
+
+  @media (min-width: 768px) {
+    .headshot {
+      width: 150px;
+      height: 162px;
+      align-self: flex-start;
+    }
+  }
+</style>
