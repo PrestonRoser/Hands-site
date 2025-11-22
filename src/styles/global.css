@@ -242,6 +242,7 @@ html, body {
   .btn-ghost:hover {
     background: rgb(230,240,255);
     color: rgb(31,75,184);
+    text-decoration: none !important;
   }
 
   .btn-ghost:focus-visible {
@@ -255,8 +256,12 @@ html, body {
     white-space: nowrap;
   }
 
+  .btn-primary:hover {
+    text-decoration: none !important;
+  }
+
   .btn-link {
-    @apply inline-flex items-center gap-1 underline underline-offset-4 text-brand-700 hover:text-brand-800;
+    @apply inline-flex items-center gap-1 underline underline-offset-4 text-brand-700 hover:text-brand-800 hover:no-underline;
     word-break: break-word;
   }
 

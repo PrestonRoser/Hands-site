@@ -3,52 +3,66 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="Contact — Get Details">
   <section class="section">
-    <p class="kicker">Contact</p>
-    <h1 class="lead">Interested in classroom pilots or pricing? Send us a note.</h1>
+    <div>
+      <p class="kicker">Contact</p>
+      <h1 class="lead">Interested in classroom pilots or pricing? Send us a note.</h1>
 
-    <hr class="hr" />
+      <hr class="hr" />
 
-    <form action="https://formspree.io/f/meorkyqz" method="POST" class="card" style="max-width:560px;margin-top:1rem">
-      <label style="display:block;margin-top:.75rem">
-        <span>Name</span><br/>
-        <input name="name" required style="width:100%;padding:.8rem;border:1px solid var(--border);border-radius:12px"/>
-      </label>
+      <form action="https://formspree.io/f/meorkyqz" method="POST" class="card" style="margin-top:1rem">
+        <label style="display:block;margin-top:.75rem">
+          <span>Name</span><br/>
+          <input name="name" required style="width:100%;padding:.8rem;border:1px solid var(--border);border-radius:12px"/>
+        </label>
 
-      <label style="display:block;margin-top:.75rem">
-        <span>Email</span><br/>
-        <input type="email" name="email" required style="width:100%;
-	  padding:.8rem;
-	  border:1px solid var(--border);
-	  border-radius:12px"
-	/>
-      </label>
+        <label style="display:block;margin-top:.75rem">
+          <span>Email</span><br/>
+          <input type="email" name="email" required style="width:100%;
+        padding:.8rem;
+        border:1px solid var(--border);
+        border-radius:12px"
+      />
+        </label>
 
-      <label style="display:block;margin-top:.75rem">
-        <span>Message</span><br/>
-        <textarea name="message" rows="4" required 
-	  style="width:100%;
-	  padding:.8rem;
-	  border:1px solid var(--border);
-	  border-radius:12px;
-	  resize: none;"
-	></textarea>
-      </label>
+        <label style="display:block;margin-top:.75rem">
+          <span>Message</span><br/>
+          <textarea name="message" rows="4" required 
+        style="width:100%;
+        padding:.8rem;
+        border:1px solid var(--border);
+        border-radius:12px;
+        resize: none;"
+      ></textarea>
+        </label>
 
-      <input type="hidden" name="_subject" value="Website contact: DNA Assembly Education" />
-      <button type="submit" class="btn-primary" style="margin-top:1rem">Send message</button>
-      <p class="muted" style="margin-top:.5rem">We’ll reply by email within 1–2 business days.</p>
-    </form>
+        <input type="hidden" name="_subject" value="Website contact: DNA Assembly Education" />
+        <button type="submit" class="btn-primary" style="margin-top:1rem">Send message</button>
+        <p class="muted" style="margin-top:.5rem">We'll reply by email within 1–2 business days.</p>
+      </form>
 
-    <!-- Business contact (ghost buttons) -->
-    <div class="card" style="max-width:560px;margin-top:1rem">
-      <p class="kicker">SproutForge3D LLC</p>
-      <div style="display:flex;flex-wrap:wrap;gap:.5rem">
-        <a class="btn-primary" href="mailto:sproutforged@gmail.com">sproutforged@gmail.com</a>
-        <a class="btn-primary" href="https://instagram.com/sproutforged" target="_blank" rel="noopener">@sproutforged</a>
-        <a class="btn-primary" href="https://sproutforge3d.etsy.com" target="_blank" rel="noopener">Etsy store</a>
-      </div>
     </div>
   </section>
 </Layout>
 
+<style>
+  /* Responsive wrapper */
+  section > div {
+    max-width: 50%;
+    margin: 0 auto;
+  }
 
+  /* Tablet: 75% width */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    section > div {
+      max-width: 75%;
+    }
+  }
+
+  /* Mobile: full width, no extra padding needed */
+  @media (max-width: 768px) {
+    section > div {
+      max-width: 100%;
+      margin: 0;
+    }
+  }
+</style>
