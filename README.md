@@ -1,90 +1,112 @@
-# 📘 HANDS – Hands-On STEM Education Kits
+# HANDS — handslearning.com
 
-HANDS (formerly *Sprout Ed*) is an open, modular, and research-driven platform focused on reintroducing *hands-on learning* into STEM education.  
-Built using **Astro** + **TailwindCSS**, this site showcases interactive classroom kits, evidence-based research, and the story behind the venture.
+The public marketing and commerce site for **HANDS Learning**: tactile, classroom-ready
+STEM kits for K-12. Built with Astro and Tailwind CSS, deployed on Vercel behind
+Cloudflare DNS.
 
-## 🧩 Project Overview
-HANDS provides educators and students with tangible, classroom-ready science kits — bridging the gap between theory and experience.  
-This repository hosts the complete website and content for the project’s online presence, integrating research, product showcases, and company story.
+This repo is the brand and commerce layer. The authenticated learning platform
+(curriculum delivery, rosters, progress) lives in a separate repo and will be served from
+`app.handslearning.com`.
 
-## 🚀 Features
-- **Full Site Refactor & Rebrand**
-  - Transitioned from *Sprout Ed* → **HANDS**
-  - Updated all assets, pages, and navigation for consistency and clarity  
-- **New `research.astro` Page**
-  - Synthesized literature review on hands-on learning effectiveness in STEM  
-  - References over 10 academic and institutional studies  
-- **Unified Styling**
-  - Global visual updates via Tailwind and global.css  
-  - Consistent bullet/list design and responsive grids  
-- **Modern Component Structure**
-  - Refactored Astro components (`HomeHero`, `WhyHands`, `ProductCard`, etc.)  
-  - Optimized for scalability, readability, and maintainability  
-- **Optimized Assets**
-  - Updated all imagery to `/public/images/`  
-  - Added compressed `.webp` versions for performance and SEO  
+## Tech stack
 
-## 🧠 Tech Stack
-- **Framework:** [Astro](https://astro.build)  
-- **Styling:** [TailwindCSS](https://tailwindcss.com)  
-- **Hosting:** [Vercel](https://vercel.com)  
-- **Domain & DNS:** [Cloudflare](https://www.cloudflare.com)  
-- **Languages:** TypeScript / Astro / HTML / CSS  
+| Layer | Choice |
+|---|---|
+| Framework | [Astro](https://astro.build) (static output) |
+| Styling | Tailwind CSS v4 + design tokens in `src/styles/global.css` |
+| Content | Astro content collections (`src/content/`) |
+| Fonts | Self-hosted Manrope + Inter (variable, woff2) |
+| Hosting | Vercel, DNS via Cloudflare |
 
-## ⚙️ Setup & Development
+## Getting started
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/PrestonRoser/DNA-Assembly-Venture.git
-cd DNA-Assembly-Venture
-```
-
-### 2. Install dependencies
 ```bash
 npm install
+npm run dev        # http://localhost:4321
+npm run build      # static build into dist/
+npm run preview    # serve the built site
 ```
 
-### 3. Run the dev server
-```bash
-npm run dev
+## Project structure
+
 ```
-Then visit [http://localhost:4321](http://localhost:4321)
-
-### 4. Build for production
-```bash
-npm run build
-```
-
-## 🌐 Deployment
-The site is configured for seamless deployment via **Vercel**:
-
-1. Push updates to the `main` branch  
-2. Vercel auto-builds and deploys to production  
-3. Domain managed via **Cloudflare DNS** → CNAME records to `cname.vercel-dns.com`
-
-## 📄 Project Structure
-```
-DNA-Assembly-Venture/
-├── public/
-│   └── images/               # all image assets (logos, kits, founders, etc.)
-├── src/
-│   ├── components/           # Astro components (Navbar, Footer, CTA, etc.)
-│   ├── layouts/              # Shared layouts
-│   ├── pages/                # Website pages (index, mission, product, research, etc.)
-│   └── styles/               # global.css & Tailwind configuration
-└── package.json
+src/
+├── content/               # the catalog — see "Catalog" below
+│   ├── kits/*.json        # one file per kit
+│   └── lessons/*.json     # public lesson metadata (no gated material)
+├── content.config.ts      # collection schemas (shaped like DB tables)
+├── lib/
+│   ├── catalog.ts         # data-access layer — the DB swap point
+│   ├── commerce.ts        # purchase channel resolution (Etsy today)
+│   └── site.ts            # brand constants, links, feature flags
+├── components/
+├── layouts/Layout.astro   # shell, SEO, skip link, fonts
+├── pages/
+│   ├── kits/index.astro   # catalog listing
+│   └── kits/[slug].astro  # kit detail, generated per catalog entry
+└── styles/global.css      # tokens, components, utilities
 ```
 
-## 📚 Research Overview
-The **Research** page compiles findings from major STEM education studies:
-- Freeman et al., *PNAS (2014)* – Active learning improves performance  
-- Smithsonian SSEC (2023) – The power of hands-on education  
-- Gallup & Walton (2024) – Engagement trends in Gen Z learners  
-- National Academies (2023) – NGSS adoption and hands-on practices  
-*(Full references available at `/src/pages/research.astro`)*
+## Catalog
 
-## 👥 Contributors
-- **Preston Roser** – Developer & Co-Founder  
-- **Esteban Gardea** – Co-Founder & Scientific Lead  
-## 🪪 License
-This project is licensed under the **MIT License** — see below.
+Kits and lessons are **data, not pages**. Adding a kit means adding one JSON file to
+`src/content/kits/` — the listing page, detail page, homepage feature band, sitemap, and
+structured data all pick it up automatically.
+
+The catalog is deliberately structured to move to a database later. Page components never
+read content collections directly; they call `src/lib/catalog.ts`, which returns plain
+`Kit` and `Lesson` objects. When the platform API owns this data, only that one file
+changes. See the comment block at the top of it for the migration steps.
+
+Two rules for catalog content:
+
+1. **Public metadata only.** Curriculum PDFs, teacher guides, and videos are access-gated
+   by the platform and must never be referenced from this repo.
+2. **No unannounced product details.** Kits that have not launched get a generic entry —
+   no specs, pricing, or component choices before launch.
+
+## Commerce
+
+Purchases currently route to the Etsy listing. First-party Stripe checkout is wired but
+inert until a Stripe account exists; see `src/lib/commerce.ts` for the three-step switch.
+
+The platform licence is always a separate line item from kit hardware, never bundled into
+the kit price.
+
+## Feature flags
+
+`src/lib/site.ts` has `features.platform.enabled`, which is `false` until
+`app.handslearning.com` is live. Flipping it to `true` surfaces sign-in and
+"register your school" entry points site-wide. Nothing links to the app while it is false.
+
+## Images
+
+Source images live in `src/assets/images/` and are optimized at build time into responsive
+WebP. Keep sources web-ready (long edge ≤ 2400px) — full-resolution camera masters get
+copied into the build output verbatim and bloat deploys.
+
+Files in `public/` are served as-is and are not optimized: use it only for the favicon,
+SVG icons, fonts, and the social preview image.
+
+## Conventions
+
+- Button hierarchy: `.btn-solid` (one per view) → `.btn-secondary` → `.btn-link`.
+- Every page sets a title and description; `Layout` handles canonical, Open Graph, and
+  Twitter tags.
+- Pages using full-bleed `.band` sections must pass `contained={false}` to `Layout`.
+- WCAG 2.2 AA is the build standard: visible focus, one `h1` per page, alt text on every
+  image, no colour-only status.
+
+## Deployment
+
+Push to `main`; Vercel builds and deploys. Domain is managed in Cloudflare DNS with a CNAME
+to `cname.vercel-dns.com`.
+
+## Contributors
+
+- **Preston Roser** — Co-founder, engineering
+- **Esteban Gardea** — Co-founder, product and scientific lead
+
+## License
+
+MIT.
