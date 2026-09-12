@@ -1,20 +1,66 @@
 ---
+const REASONS = [
+  {
+    title: 'Active learning improves outcomes',
+    body: 'Students understand faster and remember longer when they build, test, and explain concepts with their hands.',
+  },
+  {
+    title: 'Teachers need ready-to-run tools',
+    body: 'HANDS kits reduce prep time and fit flexible 15–45 minute blocks for bell-ringers, stations, or full labs.',
+  },
+  {
+    title: 'Built alongside educators',
+    body: 'Every kit is refined from real classroom feedback across pilot programs, not designed in isolation.',
+  },
+];
 ---
-<section class="section" style="padding-top:0">
-  <h2 class="h2">Why Hands</h2>
-  <div class="hr"></div>
-  <div class="grid-2">
-    <div class="card">
-      <h3 class="h3">Active learning improves outcomes</h3>
-      <p class="muted">Students understand faster and remember longer when they build, test, and explain concepts with their hands.</p>
+
+<section class="section">
+  <div class="container">
+    <h2 class="h2">Why HANDS</h2>
+    <p class="muted why-intro">
+      Abstract science is hard to hold onto. Physical models give students something to
+      reason with.
+    </p>
+
+    <div class="grid-3 why-grid">
+      {
+        REASONS.map((r) => (
+          <div class="card why-card">
+            <h3 class="h3">{r.title}</h3>
+            <p class="muted why-body">{r.body}</p>
+          </div>
+        ))
+      }
     </div>
-    <div class="card">
-      <h3 class="h3">Teachers need ready-to-run tools</h3>
-      <p class="muted">Hands kits reduce prep time and fit flexible 15-45 minute blocks for bell-ringers, stations, or full labs.</p>
-    </div>
-  </div>
-  <div style="margin-top:1rem">
-    <a class="btn-link" href="/research">Why hands-on works</a>
+
+    <p class="why-more">
+      <a class="btn-link" href="/research">See the research behind hands-on learning</a>
+    </p>
   </div>
 </section>
 
+<style>
+  .why-intro {
+    margin: 0.4rem 0 1.5rem;
+    max-width: 60ch;
+  }
+
+  .why-grid {
+    margin-top: 1rem;
+  }
+
+  .why-card {
+    padding: 1.35rem 1.25rem;
+  }
+
+  .why-body {
+    margin: 0.4rem 0 0;
+    font-size: 0.93rem;
+    line-height: 1.55;
+  }
+
+  .why-more {
+    margin-top: 1.5rem;
+  }
+</style>

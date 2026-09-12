@@ -1,0 +1,16 @@
+{
+  "title": "Mutations and Their Effects",
+  "summary": "Students change one or two bases in a sequence from the earlier lessons, re-transcribe and re-translate it, and classify the result as a silent, missense, or nonsense mutation.",
+  "order": 3,
+  "kit": "dna-rna-assembly-kit",
+  "activityMinutes": null,
+  "standards": [],
+  "outcomes": [
+    "Define what a mutation is.",
+    "Model different types of mutations using DNA and RNA.",
+    "Classify mutations as silent, missense, or nonsense.",
+    "Explain how even a single base change can affect proteins."
+  ],
+  "access": "gated",
+  "advanced": false
+}

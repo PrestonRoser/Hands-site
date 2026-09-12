@@ -1,0 +1,25 @@
+{
+  "sku": "HANDS-ENG-TBD",
+  "name": "More HANDS kits in development",
+  "tagline": "Tactile STEM beyond biology",
+  "summary": "We are prototyping additional hands-on STEM kits with the same classroom-first approach: durable parts, teacher-ready activities, and curriculum built alongside educators. Follow along or join a pilot to help shape them.",
+  "status": "in_development",
+  "price": null,
+  "purchase": {
+    "channel": "none",
+    "stripePriceId": null,
+    "quoteAvailable": false
+  },
+  "images": [],
+  "subjects": ["Engineering"],
+  "gradeBands": ["Middle school", "High school"],
+  "standards": [],
+  "includes": [],
+  "teaches": [],
+  "learningOutcomes": [],
+  "audience": [],
+  "deepDive": [],
+  "lessons": [],
+  "featured": false,
+  "order": 90
+}

@@ -1,26 +1,60 @@
 ---
+const STATS = [
+  { label: 'Pilots', value: '8 classrooms', detail: 'Phoenix, AZ' },
+  { label: 'Interest', value: '20,000+ views', detail: 'Across product media' },
+  { label: 'Recognition', value: 'Venture Devils', detail: 'ASU Edson E+I' },
+];
 ---
-<section class="section" style="padding-top:0">
-  <h2 class="h2" style="text-align:center">Early traction</h2>
-  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;max-width:900px;margin:0 auto">
-    <div class="card" style="text-align:center">
-      <p class="muted" style="margin:0">Pilots</p>
-      <p class="h3" style="margin:.25rem 0 0">8 classrooms</p>
-      <p class="muted" style="margin:.25rem 0 0">Phoenix, AZ</p>
+
+<section class="section">
+  <div class="container">
+    <h2 class="h2 trust-title">Early traction</h2>
+
+    <div class="stat-grid">
+      {
+        STATS.map((s) => (
+          <div class="card stat-card">
+            <p class="stat-label muted">{s.label}</p>
+            <p class="h3 stat-value">{s.value}</p>
+            <p class="stat-detail muted">{s.detail}</p>
+          </div>
+        ))
+      }
     </div>
-    <div class="card" style="text-align:center">
-      <p class="muted" style="margin:0">Interest</p>
-      <p class="h3" style="margin:.25rem 0 0">20,000+ views</p>
-      <p class="muted" style="margin:.25rem 0 0">Across product media</p>
-    </div>
-    <div class="card" style="text-align:center">
-      <p class="muted" style="margin:0">Sales</p>
-      <p class="h3" style="margin:.25rem 0 0">Early Etsy orders</p>
-      <p class="muted" style="margin:.25rem 0 0">See more on our Venture page</p>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem">
-    <a class="btn-link" href="/venture">View timeline and updates</a>
+
+    <p class="trust-more">
+      <a class="btn-link" href="/venture">View timeline and updates</a>
+    </p>
   </div>
 </section>
 
+<style>
+  .trust-title {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .stat-card {
+    text-align: center;
+    padding: 1.25rem 1rem;
+  }
+
+  .stat-label {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .stat-value {
+    margin: 0.3rem 0 0;
+  }
+
+  .stat-detail {
+    margin: 0.3rem 0 0;
+    font-size: 0.88rem;
+  }
+
+  .trust-more {
+    text-align: center;
+    margin-top: 1.25rem;
+  }
+</style>

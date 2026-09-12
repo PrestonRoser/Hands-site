@@ -1,0 +1,84 @@
+---
+import type { Kit } from '../lib/catalog';
+import { getPurchaseAction, getQuoteAction } from '../lib/commerce';
+
+interface Props {
+  kit: Kit;
+  /** Show the secondary quote link beside the primary action. */
+  showQuote?: boolean;
+  /** Render the explanatory note under the buttons. */
+  showNote?: boolean;
+  align?: 'start' | 'center';
+}
+
+const { kit, showQuote = true, showNote = true, align = 'start' } = Astro.props;
+
+const primary = getPurchaseAction(kit);
+const quote = showQuote ? getQuoteAction(kit) : null;
+const external = primary.external
+  ? { target: '_blank', rel: 'noopener' }
+  : {};
+---
+
+<div class="buy" data-align={align}>
+  <div class="buy-actions">
+    <a class="btn-solid" href={primary.href} {...external}>
+      {primary.label}
+      {
+        primary.external && (
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M7 17L17 7M17 7H9M17 7v8" />
+          </svg>
+        )
+      }
+      {primary.external && <span class="sr-only">(opens in a new tab)</span>}
+    </a>
+
+    {quote && <a class="btn-secondary" href={quote.href}>{quote.label}</a>}
+  </div>
+
+  {showNote && primary.note && <p class="buy-note">{primary.note}</p>}
+</div>
+
+<style>
+  .buy-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .buy[data-align='center'] .buy-actions {
+    justify-content: center;
+  }
+
+  .buy-note {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0.6rem 0 0;
+  }
+
+  .buy[data-align='center'] .buy-note {
+    text-align: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

@@ -1,23 +1,74 @@
 @import "tailwindcss";
 
 /* =================================================================
-   THEME TOKENS & CSS VARIABLES
+   SELF-HOSTED FONTS
+   Replaces the render-blocking Google Fonts stylesheet. Variable
+   fonts, latin + latin-ext subsets only.
+   ================================================================= */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url('/fonts/manrope-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url('/fonts/manrope-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* =================================================================
+   THEME TOKENS
+   Colour values must be real CSS colours here. They were previously
+   space-separated RGB triplets, which Tailwind v4 cannot resolve —
+   every `text-brand-*` / `bg-brand-*` / `ring-brand-*` utility using
+   them silently produced invalid CSS and was dropped, which is why
+   focus rings were not visible.
    ================================================================= */
 @theme {
-  --color-brand-50: 239 246 255;
-  --color-brand-100: 219 234 254;
-  --color-brand-200: 191 219 254;
-  --color-brand-300: 147 197 253;
-  --color-brand-400: 96 165 250;
-  --color-brand-500: 59 130 246;
-  --color-brand-600: 37 99 235;
-  --color-brand-700: 29 78 216;
-  --color-brand-800: 30 64 175;
-  --color-brand-900: 30 58 138;
-  --color-coral-500: 255 105 120;
-  --color-azure-600: 38 103 255;
-  --color-sand-400: 243 201 140;
-  --color-mint-400: 172 234 211;
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+  --color-coral-500: #ff6978;
+  --color-azure-600: #2667ff;
+  --color-sand-400: #f3c98c;
+  --color-mint-400: #acead3;
 }
 
 :root {
@@ -27,82 +78,177 @@
   --muted: #475569;
   --border: #e2e8f0;
   --shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+
+  /* Brand blues, available outside Tailwind utilities. */
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --brand-deep: #1e3a8a;
+  --brand-interactive: #1f4bb8;
+  --brand-tint: #e6f0ff;
+
+  /* Semantic state colours. All meet 4.5:1 on white. */
+  --success: #166534;
+  --warning: #92400e;
+  --danger: #b91c1c;
+
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Manrope", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Height of the sticky header, used for scroll offsets. */
+  --header-h: 64px;
 }
 
 /* =================================================================
-   BASE STYLES
+   BASE
    ================================================================= */
 html, body {
   margin: 0;
   background: var(--bg);
-  background-repeat: no-repeat;
-  background-size: cover;
   color: var(--text);
   font-family: var(--font-sans);
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
+
+/* Scripts toggle visibility with the `hidden` attribute; make sure it wins
+   over component display rules (flex/grid) that would otherwise re-show it. */
+[hidden] {
+  display: none !important;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Anything linked to by id must clear the sticky header. */
+:target,
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+
+/* A single, always-visible focus style. Never remove without a replacement. */
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip link for keyboard users. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0 0 12px 0;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
 /* =================================================================
-   LAYOUT COMPONENTS
+   LAYOUT
    ================================================================= */
 @layer components {
-  .container { 
-    max-width: 1180px; 
-    margin: 0 auto; 
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
     padding: 0 1rem;
     width: 100%;
   }
-  
-  .section { 
+
+  /* Narrower column for long-form reading. */
+  .container-prose {
+    max-width: 70ch;
+    margin: 0 auto;
+    padding: 0 1rem;
+    width: 100%;
+  }
+
+  .section {
     padding: 2rem 0;
   }
-  
-  /* Responsive section padding */
+
   @media (min-width: 768px) {
     .section { padding: 3rem 0; }
   }
-  
+
   @media (min-width: 1024px) {
     .section { padding: 4rem 0; }
   }
 
+  /* Full-bleed section panel. `main` no longer constrains width, so a band
+     can span the viewport with its own inner container.
+
+     The panel has no border. A hard 1px line between the off-white page
+     background and a white panel reads as a seam; instead each band fades
+     from the page background into its fill over the first and last 3rem.
+     The two gradients sit over a solid fill, so this works at any height. */
+  .band {
+    background-color: var(--surface);
+    background-image:
+      linear-gradient(180deg, var(--bg), transparent 3rem),
+      linear-gradient(0deg, var(--bg), transparent 3rem);
+  }
+
+  .band-tint {
+    background-color: var(--brand-tint);
+    background-image:
+      linear-gradient(180deg, var(--bg), transparent 3rem),
+      linear-gradient(0deg, var(--bg), transparent 3rem);
+  }
+
   /* =================================================================
-     GRID SYSTEMS
+     GRIDS
      ================================================================= */
-  .grid-2 { 
-    display: grid; 
+  .grid-2 {
+    display: grid;
     gap: 1.5rem;
     grid-template-columns: 1fr;
   }
-  
+
   @media (min-width: 768px) {
-    .grid-2 { 
+    .grid-2 {
       gap: 1.75rem;
       grid-template-columns: 1fr 1fr;
     }
   }
-  
+
   @media (min-width: 960px) {
-    .grid-2 { 
+    .grid-2 {
       grid-template-columns: 1.15fr .85fr;
     }
   }
 
-  /* Force single column on small screens */
-  @media (max-width: 767px) {
-    .grid-2 {
-      grid-template-columns: 1fr !important;
-    }
+  /* Equal halves, for content that should not be weighted. */
+  .grid-2-even {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
   }
 
-  .grid-vertical { 
-    grid-template-columns: 1fr !important;
+  @media (min-width: 768px) {
+    .grid-2-even { grid-template-columns: 1fr 1fr; }
+  }
+
+  .grid-vertical {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .grid-vertical--spaced > *:not(:last-child) {
@@ -110,7 +256,7 @@ html, body {
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border);
   }
-  
+
   @media (min-width: 768px) {
     .grid-vertical--spaced > *:not(:last-child) {
       padding-bottom: 3rem;
@@ -118,18 +264,31 @@ html, body {
     }
   }
 
-  .grid-3 { 
-    display: grid; 
+  .grid-3 {
+    display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   @media (min-width: 640px) {
-    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  
+
   @media (min-width: 960px) {
-    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  /* Stat/trust cards. Stacks on phones instead of forcing three columns. */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 640px) {
+    .stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
   /* =================================================================
@@ -140,7 +299,7 @@ html, body {
     @apply font-extrabold tracking-tight text-3xl md:text-4xl lg:text-5xl text-neutral-900;
     line-height: 1.1;
   }
-  
+
   .heading-section {
     font-family: var(--font-display);
     @apply font-bold text-xl md:text-2xl text-neutral-900;
@@ -152,18 +311,17 @@ html, body {
     font-size: clamp(1.75rem, 4.5vw, 3rem);
     line-height: 1.1;
     margin: 0;
-    word-wrap: break-word;
     overflow-wrap: break-word;
   }
-  
+
   .h2 {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: clamp(1.35rem, 3vw, 1.75rem);
     margin: 0 0 .25rem;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
-  
+
   .h3 {
     font-family: var(--font-display);
     font-weight: 700;
@@ -171,43 +329,41 @@ html, body {
     margin: 0;
   }
 
-  .kicker { 
-    @apply uppercase tracking-widest text-xs md:text-[0.78rem] font-semibold text-neutral-500;
-  }
-  
-  .lead { 
-    @apply text-base md:text-lg leading-7 text-neutral-600;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-  
-  .muted {
+  .kicker {
+    @apply uppercase tracking-widest text-xs md:text-[0.78rem] font-semibold;
     color: var(--muted);
   }
 
+  .lead {
+    @apply text-base md:text-lg leading-7;
+    color: var(--muted);
+    overflow-wrap: break-word;
+  }
+
+  .muted { color: var(--muted); }
+
   /* =================================================================
-     CARD & SURFACE COMPONENTS
+     CARDS
      ================================================================= */
   .card {
     @apply bg-white border border-neutral-200 rounded-2xl px-4 py-3;
     box-shadow: var(--shadow);
-    word-wrap: break-word;
     overflow-wrap: break-word;
   }
-  
+
   @media (min-width: 640px) {
     .card { @apply px-5; }
   }
 
-  .card-hover { 
-    position: relative; 
+  .card-hover {
+    position: relative;
     overflow: hidden;
     transition: transform 0.2s ease;
   }
-  
+
   .card-hover::after {
     content: "";
-    position: absolute; 
+    position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(38,103,255,0.08), rgba(172,234,211,0.10));
     opacity: 0;
@@ -215,54 +371,53 @@ html, body {
     border-radius: inherit;
     pointer-events: none;
   }
-  
-  .card-hover:hover::after { 
-    opacity: 1; 
-  }
-  
-  .card-hover:hover img { 
-    filter: saturate(1.05) hue-rotate(6deg) contrast(1.02); 
-    transform: translateY(-1px); 
-  }
+
+  .card-hover:hover::after { opacity: 1; }
 
   /* =================================================================
-     BUTTON COMPONENTS
+     BUTTONS
+     Hierarchy: btn-solid (one per view) > btn-secondary > btn-link
      ================================================================= */
-  .btn { 
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors;
+  .btn-solid {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors;
+    background: var(--brand);
+    color: #fff;
+    border: 1px solid var(--brand);
     white-space: nowrap;
   }
 
-  .btn-ghost {
-    @apply inline-flex items-center gap-2 text-sm md:text-[15px] font-medium 
-           px-3 py-2 rounded-xl transition-colors
-           text-neutral-700 no-underline bg-transparent border-0 shadow-none;
+  .btn-solid:hover {
+    background: var(--brand-dark);
+    border-color: var(--brand-dark);
+    color: #fff;
   }
 
-  .btn-ghost:hover {
-    background: rgb(230,240,255);
-    color: rgb(31,75,184);
-    text-decoration: none !important;
-  }
-
-  .btn-ghost:focus-visible {
-    @apply outline-none ring-4;
-    box-shadow: 0 0 0 4px rgba(31,75,184,.25);
-  }
-
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors;
     @apply bg-white text-neutral-700 border border-neutral-200 hover:bg-neutral-50;
     white-space: nowrap;
   }
 
-  .btn-primary:hover {
-    text-decoration: none !important;
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 text-sm md:text-[15px] font-medium
+           px-3 py-2 rounded-xl transition-colors
+           text-neutral-700 bg-transparent border-0 shadow-none;
+  }
+
+  .btn-ghost:hover {
+    background: var(--brand-tint);
+    color: var(--brand-interactive);
   }
 
   .btn-link {
-    @apply inline-flex items-center gap-1 underline underline-offset-4 text-brand-700 hover:text-brand-800 hover:no-underline;
-    word-break: break-word;
+    @apply inline-flex items-center gap-1 underline underline-offset-4;
+    color: var(--brand-dark);
+    overflow-wrap: break-word;
+  }
+
+  .btn-link:hover {
+    color: var(--brand-deep);
+    text-decoration: none;
   }
 
   .icon-btn {
@@ -271,58 +426,119 @@ html, body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgb(226 232 240);
+    border: 1px solid var(--border);
     background: #fff;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    color: rgb(31 75 184);
-    text-decoration: none;
+    color: var(--brand-interactive);
     flex-shrink: 0;
   }
-  
+
   .icon-btn:hover {
     transform: translateY(-1px);
     transition: transform 0.15s ease;
-    background: rgb(246 248 255);
+    background: #f6f8ff;
   }
 
   /* =================================================================
-     LINK & ANCHOR STYLES
+     BADGES
+     ================================================================= */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .2rem .6rem;
+    border-radius: 9999px;
+    font-size: .78rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+  }
+
+  .badge-available {
+    color: var(--success);
+    border-color: rgba(22, 101, 52, .25);
+    background: rgba(22, 101, 52, .06);
+  }
+
+  .badge-dev {
+    color: var(--warning);
+    border-color: rgba(146, 64, 14, .25);
+    background: rgba(146, 64, 14, .06);
+  }
+
+  /* =================================================================
+     LINKS
+     Underlines belong to prose links, not to buttons. Scoping it here
+     removes the need for `text-decoration: none !important` overrides
+     that previously fought a global rule.
      ================================================================= */
   a {
     color: inherit;
     text-decoration: none;
-    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+    transition: color 0.2s ease;
   }
 
-  a:hover,
-  a:focus-visible {
-    color: rgb(var(--color-brand-600));
+  .prose-links a:not([class]),
+  main p > a:not([class]),
+  main li > a:not([class]) {
+    color: var(--brand-dark);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  /* =================================================================
-     LIST STYLES
-     ================================================================= */
-  .dot-list { 
-    list-style: none; 
-    padding-left: 0; 
-    margin: .25rem 0 0;
-  }
-  
-  .dot-list li { 
-    margin: .25rem 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+  .prose-links a:not([class]):hover,
+  main p > a:not([class]):hover,
+  main li > a:not([class]):hover {
+    color: var(--brand-deep);
   }
 
   /* =================================================================
-     NAVIGATION COMPONENTS
+     LISTS
+     ================================================================= */
+  .dot-list {
+    list-style: none;
+    padding-left: 0;
+    margin: .25rem 0 0;
+  }
+
+  .dot-list li {
+    margin: .25rem 0;
+    overflow-wrap: break-word;
+  }
+
+  /* Bulleted variant that does not rely on a literal "•" in the markup. */
+  .bullet-list {
+    list-style: none;
+    padding-left: 0;
+    margin: .5rem 0 0;
+  }
+
+  .bullet-list li {
+    position: relative;
+    padding-left: 1.1rem;
+    margin: .35rem 0;
+    overflow-wrap: break-word;
+  }
+
+  .bullet-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+  }
+
+  /* =================================================================
+     NAVIGATION
      ================================================================= */
   .nav-wrap {
-    position: sticky; 
-    top: 0; 
+    position: sticky;
+    top: 0;
     z-index: 40;
     background: rgba(255,255,255,0.88);
     -webkit-backdrop-filter: saturate(180%) blur(10px);
@@ -330,17 +546,8 @@ html, body {
     border-bottom: 1px solid rgba(59,124,255,0.15);
   }
 
-  .nav-link {
-    @apply text-sm md:text-[15px] text-neutral-700 hover:text-neutral-900 px-3 py-2 rounded-xl transition-colors;
-    white-space: nowrap;
-  }
-  
-  .nav-link[aria-current="page"] {
-    @apply bg-brand-100 text-brand-800;
-  }
-
   /* =================================================================
-     PERSON/PROFILE COMPONENTS
+     PERSON / PROFILE
      ================================================================= */
   .person {
     display: grid;
@@ -348,29 +555,22 @@ html, body {
     gap: 1rem;
     align-items: start;
   }
-  
+
   @media (min-width: 640px) {
-    .person {
-      grid-template-columns: auto 1fr;
-    }
+    .person { grid-template-columns: auto 1fr; }
   }
 
-  .person-body { 
+  .person-body {
     min-width: 0;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
-  .person-actions {
-    display: flex;
-    gap: .5rem;
-    flex-wrap: wrap;
-    margin-top: .5rem;
-  }
-  
+  .person-actions,
   .person-actions.icons {
     display: flex;
     gap: .5rem;
     flex-wrap: wrap;
+    margin-top: .5rem;
   }
 
   .headshot {
@@ -378,19 +578,15 @@ html, body {
     height: 96px;
     border-radius: 16px;
     object-fit: cover;
-    background: var(--pastel-green);
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     flex-shrink: 0;
   }
-  
+
   @media (min-width: 640px) {
-    .headshot { 
-      width: 120px; 
-      height: 120px; 
-    }
+    .headshot { width: 120px; height: 120px; }
   }
-  
+
   @media (min-width: 768px) {
     .headshot {
       width: 150px;
@@ -400,11 +596,11 @@ html, body {
   }
 
   /* =================================================================
-     FOUNDER QUOTE BLOCKS
+     FOUNDER QUOTES
      ================================================================= */
   .founder-quote {
-    background: rgb(243, 246, 255);
-    border-left: 4px solid rgb(59, 130, 246);
+    background: #f3f6ff;
+    border-left: 4px solid var(--brand-500, #3b82f6);
     border-radius: 12px;
     padding: 1rem;
     color: #1e293b;
@@ -412,18 +608,16 @@ html, body {
     line-height: 1.6;
     margin-top: 1.25rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
-  
+
   @media (min-width: 640px) {
-    .founder-quote {
-      padding: 1rem 1.25rem;
-    }
+    .founder-quote { padding: 1rem 1.25rem; }
   }
 
   .founder-quote.prominent {
     background: linear-gradient(180deg, #f5f7fb 0%, #e9edf7 100%);
-    border-left: 5px solid #2563eb;
+    border-left: 5px solid var(--brand);
     border-radius: 14px;
     padding: 1.5rem;
     font-size: 1rem;
@@ -434,7 +628,7 @@ html, body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-style: normal;
   }
-  
+
   @media (min-width: 640px) {
     .founder-quote.prominent {
       padding: 1.8rem 2rem;
@@ -442,191 +636,185 @@ html, body {
     }
   }
 
-  .founder-quote.prominent p + p {
-    margin-top: 1rem;
-  }
+  .founder-quote.prominent p + p { margin-top: 1rem; }
 
   /* =================================================================
-     CTA COMPONENTS
+     CTA BAND
      ================================================================= */
   .cta-band {
     text-align: center;
     padding: 2rem 1rem;
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(0,0,0,.04);
-    background: radial-gradient(60% 120% at 50% 0%, rgba(0,0,0,.02), transparent), rgb(255 255 255 / .75);
-    backdrop-filter: blur(4px);
+    background: radial-gradient(60% 120% at 50% 0%, rgba(37,99,235,.05), transparent), rgba(255,255,255,.75);
     border: 1px solid var(--border);
     max-width: 900px;
     margin: 0 auto;
   }
-  
+
   @media (min-width: 640px) {
-    .cta-band {
-      padding: 2.25rem 1.5rem;
-    }
+    .cta-band { padding: 2.25rem 1.5rem; }
   }
-  
-  .cta-title { 
-    font-size: clamp(1.15rem, 2.2vw, 1.75rem); 
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.2vw, 1.75rem);
     font-weight: 800;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
-  
-  .cta-subtext { 
-    color: var(--muted); 
+
+  .cta-subtext {
+    color: var(--muted);
     margin: .35rem 0 1rem;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
-  
-  .cta-actions { 
+
+  .cta-actions {
     display: flex;
-    gap: .75rem; 
-    flex-wrap: wrap; 
+    gap: .75rem;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
   }
 
   /* =================================================================
-     HERO IMAGE
+     MEDIA
      ================================================================= */
-  .hero-img { 
-    border-width: 2px; 
-    border-style: solid; 
-    border-radius: 20px; 
-    border-color: rgb(31,75,184);
+  .hero-img {
+    border: 2px solid var(--brand-interactive);
+    border-radius: 20px;
     width: 100%;
     height: auto;
-    max-width: 100%;
     display: block;
   }
 
   /* =================================================================
      DIVIDERS
      ================================================================= */
-  .hr { 
-    height: 1px; 
-    background: var(--border); 
+  .hr {
+    height: 1px;
+    background: var(--border);
     margin: 2rem 0;
     border: none;
   }
-  
+
   @media (min-width: 768px) {
     .hr { margin: 2.25rem 0; }
   }
 
-  .footer-divider { 
-    border-top: 1px solid var(--border); 
-  }
-
-  /* =================================================================
-     FAQ DETAILS ELEMENTS
-     ================================================================= */
-  details.card summary {
-    list-style: none;
-    cursor: pointer;
-    padding: .35rem 0;
-    font-weight: 600;
-    word-wrap: break-word;
-  }
-  
-  details.card summary::marker { 
-    display: none; 
-  }
-  
-  details.card + details.card { 
-    border-top: 1px solid var(--border); 
-  }
-  
-  details.card p { 
-    margin: .4rem 0 0; 
-    color: var(--muted);
-    word-wrap: break-word;
-  }
-
-  /* =================================================================
-     PASTEL DIVIDERS (for product page)
-     ================================================================= */
-  .pastel-hr { 
-    height: 4px; 
-    border-radius: 9999px; 
-    margin: 1rem 0 1.25rem; 
+  .pastel-hr {
+    height: 4px;
+    border-radius: 9999px;
+    margin: 1rem 0 1.25rem;
     opacity: .95;
     border: none;
   }
-  
+
   .pastel-hr.coral { background: rgba(255, 105, 120, .35); }
   .pastel-hr.azure { background: rgba(38, 103, 255, .25); }
   .pastel-hr.sand  { background: rgba(243, 201, 140, .35); }
   .pastel-hr.mint  { background: rgba(172, 234, 211, .45); }
 
   /* =================================================================
-     UTILITY CLASSES
+     DETAILS / ACCORDION
      ================================================================= */
-  .focus-ring { 
-    @apply focus:outline-none focus:ring-4 focus:ring-brand-300; 
-  }
-  
-  .font-display { 
-    font-family: var(--font-display); 
-  }
-  
-  .font-sans { 
-    font-family: var(--font-sans); 
+  details.card summary {
+    list-style: none;
+    cursor: pointer;
+    padding: .35rem 0;
+    font-weight: 600;
+    overflow-wrap: break-word;
   }
 
-  .full { 
-    grid-column: 1 / -1; 
+  details.card summary::marker,
+  details.card summary::-webkit-details-marker {
+    display: none;
   }
-  
-  .placeholder {
-    border: 1px dashed var(--border);
-    border-radius: .75rem;
-    padding: 1rem;
+
+  details.card p {
+    margin: .4rem 0 0;
     color: var(--muted);
-    text-align: center;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   /* =================================================================
-     FEATURE GRID (Product Page)
+     FORMS
      ================================================================= */
+  .field { display: block; margin-top: 1rem; }
+
+  .field > span {
+    display: block;
+    font-weight: 600;
+    font-size: .9rem;
+    margin-bottom: .35rem;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    width: 100%;
+    padding: .75rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    font: inherit;
+    color: var(--text);
+  }
+
+  .textarea { resize: vertical; min-height: 8rem; }
+
+  .input:focus-visible,
+  .select:focus-visible,
+  .textarea:focus-visible {
+    border-color: var(--brand);
+  }
+
+  .field-hint {
+    font-size: .85rem;
+    color: var(--muted);
+    margin: .35rem 0 0;
+  }
+
+  /* =================================================================
+     UTILITIES
+     ================================================================= */
+  .focus-ring:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+  }
+
+  .font-display { font-family: var(--font-display); }
+  .font-sans { font-family: var(--font-sans); }
+  .full { grid-column: 1 / -1; }
+
   .feature-grid {
     display: grid;
     gap: .55rem;
     grid-template-columns: 1fr;
   }
-  
+
   @media (min-width: 760px) {
-    .feature-grid { 
-      grid-template-columns: repeat(2, 1fr); 
-    }
+    .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  
+
   .pill {
-    display: flex; 
-    gap: .5rem; 
-    align-items: center; 
+    display: flex;
+    gap: .5rem;
+    align-items: center;
     padding: .6rem .8rem;
-    border: 1px solid var(--border); 
+    border: 1px solid var(--border);
     border-radius: 9999px;
-    background: #fff; 
+    background: #fff;
     box-shadow: 0 1px 0 rgba(0,0,0,.02);
-    word-wrap: break-word;
     overflow-wrap: break-word;
   }
-  
-  .pill strong { 
-    font-weight: 800;
-    white-space: nowrap;
-  }
-  
-  .pill span { 
-    color: var(--muted); 
-  }
+
+  .pill strong { font-weight: 800; white-space: nowrap; }
+  .pill span { color: var(--muted); }
 }
 
 /* =================================================================
-   RESPONSIVE IMAGE OPTIMIZATION
+   IMAGES
    ================================================================= */
 img {
   max-width: 100%;

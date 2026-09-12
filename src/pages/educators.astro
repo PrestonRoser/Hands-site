@@ -1,0 +1,230 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { listKits, listLessonsForKit, formatRange } from '../lib/catalog';
+import { features } from '../lib/site';
+
+const kits = await listKits({ status: 'available' });
+const featured = kits[0];
+const lessons = featured ? await listLessonsForKit(featured.slug) : [];
+const duration = featured ? formatRange(featured.activityMinutes, 'minutes') : null;
+
+const STEPS = [
+  {
+    title: 'Pick a kit',
+    body: 'One kit supports a small group of 2–4 students. Most classrooms run a set of kits across stations or lab groups.',
+  },
+  {
+    title: 'Request a quote',
+    body: 'Tell us your class size and timeline. We provide classroom bundles, educator pricing, a W-9, and accept purchase orders from schools and districts.',
+  },
+  {
+    title: 'Run the lessons',
+    body: 'Kits arrive with sequenced lessons, each with learning goals, a guided activity, practice exercises, and reflection questions. Activities are designed for quick setup and repeat use across multiple classes a day.',
+  },
+];
+
+const SUPPORT = [
+  'Classroom bundles and educator pricing',
+  'W-9 on request; purchase orders accepted',
+  'Replacement part packs for bases, backbones, and jigs',
+  'Pilot programs with direct feedback into kit design',
+];
+---
+
+<Layout
+  title="For educators"
+  description="How HANDS kits work in a real classroom: lesson sequences, standards alignment, classroom pricing, purchase orders, and pilot programs."
+  contained={false}
+>
+  <section class="section">
+    <div class="container">
+      <p class="kicker">For educators</p>
+      <h1 class="h1">Built with teachers, for real class periods</h1>
+      <p class="lead intro">
+        HANDS kits are designed around the constraints teachers actually have: limited
+        minutes, mixed group sizes, and the need to reset quickly between classes. Every
+        kit is refined from classroom pilot feedback.
+      </p>
+      <div class="head-actions">
+        <a class="btn-solid" href="/contact?topic=quote">Request a quote</a>
+        <a class="btn-secondary" href="/contact?topic=pilot">Join a pilot</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <h2 class="h2">How it works</h2>
+      <ol class="steps">
+        {
+          STEPS.map((step, i) => (
+            <li class="card step">
+              <span class="step-num" aria-hidden="true">{i + 1}</span>
+              <div>
+                <h3 class="h3">{step.title}</h3>
+                <p class="muted step-body">{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {
+    featured && (
+      <section class="section">
+        <div class="container">
+          <h2 class="h2">What ships with a kit</h2>
+          <p class="muted lessons-intro">
+            The {featured.name} includes {lessons.length} sequenced lessons
+            {duration && ` designed for ${duration} blocks`}, each with a guided
+            activity, practice exercises, and reflection questions.
+          </p>
+
+          <div class="grid-2-even" style="align-items:start;gap:2rem">
+            <div>
+              <h3 class="h3">Lesson sequence</h3>
+              <ol class="lesson-seq">
+                {lessons.map((lesson) => (
+                  <li>
+                    <strong>{lesson.title}</strong>
+                    <span class="muted"> — {lesson.summary}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div>
+              <h3 class="h3">Standards alignment</h3>
+              <p class="muted">
+                The lesson sequence is designed to support{' '}
+                {featured.standards.join(', ')}, which asks students to explain how the
+                structure of DNA determines the structure of proteins. Each lesson opens
+                with explicit learning goals and closes with reflection questions, so it
+                maps onto an existing lesson plan. A dimension-by-dimension crosswalk is
+                available on request.
+              </p>
+
+              <h3 class="h3" style="margin-top:1.5rem">Support for schools</h3>
+              <ul class="bullet-list muted">
+                {SUPPORT.map((s) => (
+                  <li>{s}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <p class="kit-link-row">
+            <a class="btn-secondary" href={featured.href}>
+              See the full kit details
+            </a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    features.platform.enabled && (
+      <section class="section band">
+        <div class="container">
+          <h2 class="h2">HANDS Learning Platform</h2>
+          <p class="muted">
+            Schools with a licence access curriculum, track student progress, and manage
+            classroom rosters on the HANDS platform.
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-band">
+        <p class="cta-title">Planning for next semester?</p>
+        <p class="cta-subtext">
+          Tell us your grade level, class size, and timeline. We will put together a quote
+          or set up a pilot.
+        </p>
+        <div class="cta-actions">
+          <a class="btn-solid" href="/contact?topic=quote">Request a quote</a>
+          <a class="btn-secondary" href="/faq">Read the FAQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro {
+    max-width: 62ch;
+    margin-top: 0.75rem;
+  }
+
+  .head-actions {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .step {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    padding: 1.25rem;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 9999px;
+    background: var(--brand-tint);
+    color: var(--brand-dark);
+    font-weight: 800;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .step-body {
+    margin: 0.35rem 0 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .lessons-intro {
+    max-width: 68ch;
+    margin: 0.4rem 0 1.5rem;
+  }
+
+  .lesson-seq {
+    margin: 0.75rem 0 0;
+    padding-left: 1.15rem;
+    display: grid;
+    gap: 0.6rem;
+    font-size: 0.93rem;
+    line-height: 1.55;
+  }
+
+  .kit-link-row {
+    margin-top: 1.75rem;
+  }
+</style>

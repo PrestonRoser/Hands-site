@@ -1,74 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HomeHero from '../components/HomeHero.astro';
+import IntentRouter from '../components/IntentRouter.astro';
 import WhyHands from '../components/WhyHands.astro';
-import ProductCard from '../components/ProductCard.astro';
+import FeaturedKit from '../components/FeaturedKit.astro';
 import TrustRow from '../components/TrustRow.astro';
 import HomeCTA from '../components/HomeCTA.astro';
+import { site } from '../lib/site';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: site.name,
+    url: site.url,
+    logo: new URL(site.logo, site.url).href,
+    description: site.description,
+    sameAs: ['https://www.instagram.com/hand.slearning/'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: site.url,
+  },
+];
 ---
-<Layout title="Hands - Tactile STEM learning">
-  <section class="section">
 
-    <!-- 1) Hands hero -->
-    <HomeHero />
-
-    <!-- 2) Why Hands -->
-    <WhyHands />
-
-    <div class="hr"></div>
-
-    <!-- 3) Featured product card -->
-    <ProductCard />
-
-    <div class="hr"></div>
-
-    <!-- 4) Early traction / trust -->
-    <TrustRow />
-
-    <div class="hr"></div>
-
-    <!-- 5) Quick links to key pages -->
-    <section class="section" style="padding-top:0">
-      <h2 class="h2">Explore</h2>
-      <div class="grid-2">
-        <div class="card">
-          <h3 class="h3">Mission</h3>
-          <p class="muted">Our purpose and the change we want to see in classrooms.</p>
-          <a class="btn-link" href="/mission">Read the mission</a>
-        </div>
-        <div class="card">
-          <h3 class="h3">Research</h3>
-          <p class="muted">Why hands-on works, with sources and a concise synthesis.</p>
-          <a class="btn-link" href="/research">Open research</a>
-        </div>
-        <div class="card">
-          <h3 class="h3">Founders</h3>
-          <p class="muted">Our story and why we are building Hands.</p>
-          <a class="btn-link" href="/founders">Meet the team</a>
-        </div>
-        <div class="card">
-          <h3 class="h3">FAQ</h3>
-          <p class="muted">Answers to common questions about the kit and ordering.</p>
-          <a class="btn-link" href="/faq">See FAQs</a>
-        </div>
-        <div class="card">
-          <h3 class="h3">Venture</h3>
-          <p class="muted">Progress, pilots, and roadmap for Demo Day.</p>
-          <a class="btn-link" href="/venture">View updates</a>
-        </div>
-        <div class="card">
-          <h3 class="h3">Contact</h3>
-          <p class="muted">Reach us for quotes, pilots, or partnerships.</p>
-          <a class="btn-link" href="/contact">Get in touch</a>
-        </div>
-      </div>
-    </section>
-
-    <div class="hr"></div>
-
-    <!-- 6) Closing CTA -->
-    <HomeCTA />
-
-  </section>
+<Layout
+  title="HANDS — Hands-on STEM kits for K-12 classrooms"
+  description={site.description}
+  brandSuffix={false}
+  jsonLd={jsonLd}
+  contained={false}
+>
+  <HomeHero />
+  <IntentRouter />
+  <WhyHands />
+  <FeaturedKit />
+  <TrustRow />
+  <HomeCTA />
 </Layout>
-

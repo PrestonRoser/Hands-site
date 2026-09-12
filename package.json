@@ -1,5 +1,5 @@
 {
-  "name": "dnaweb",
+  "name": "hands-site",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -17,5 +17,9 @@
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.0",
     "tailwindcss": "^4.1.14"
-  }
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4"
+  },
+  "description": "Marketing and commerce site for HANDS Learning (handslearning.com)"
 }

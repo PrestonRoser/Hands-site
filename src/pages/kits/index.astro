@@ -1,0 +1,160 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import KitCard from '../../components/KitCard.astro';
+import { listKits } from '../../lib/catalog';
+import { site } from '../../lib/site';
+
+const kits = await listKits();
+const purchasable = kits.filter((k) => k.status === 'available' || k.status === 'preorder');
+const upcoming = kits.filter((k) => k.status === 'in_development');
+
+/**
+ * Layout follows catalog size. A three-across grid holding a single product
+ * leaves most of the page empty, so the catalog uses full-width rows until
+ * there are enough kits to actually fill a grid.
+ */
+const variant = purchasable.length >= 3 ? 'grid' : 'row';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'HANDS kits',
+    description: 'Tactile, classroom-ready STEM kits from HANDS.',
+    url: new URL('/kits', site.url).href,
+    hasPart: purchasable.map((kit) => ({
+      '@type': 'Product',
+      name: kit.name,
+      description: kit.summary,
+      sku: kit.sku,
+      url: new URL(kit.href, site.url).href,
+    })),
+  },
+];
+---
+
+<Layout
+  title="Kits"
+  description="Tactile, classroom-ready STEM kits from HANDS. Durable parts, teacher-ready activities, and curriculum built alongside educators."
+  jsonLd={jsonLd}
+  contained={false}
+>
+  <section class="section">
+    <div class="container">
+      <p class="kicker">Kits</p>
+      <h1 class="h1">Classroom kits you can put in students' hands</h1>
+      <p class="lead intro">
+        Every HANDS kit pairs durable, reusable parts with teacher-ready activities that
+        fit a normal class period. Start with the DNA &amp; RNA Assembly Kit, built and
+        refined across classroom pilots.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <h2 class="sr-only">Available kits</h2>
+      <div class:list={['kit-list', `is-${variant}`]}>
+        {purchasable.map((kit, i) => (
+          <KitCard kit={kit} variant={variant} priority={i === 0} />
+        ))}
+      </div>
+
+      {
+        upcoming.length > 0 && (
+          <div class="upcoming-block">
+            <h2 class="upcoming-title">Also in development</h2>
+            <div class="upcoming-list">
+              {upcoming.map((kit) => (
+                <KitCard kit={kit} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="cta-band">
+        <p class="cta-title">Buying for a class, school, or district?</p>
+        <p class="cta-subtext">
+          We provide classroom bundles, educator pricing, W-9s, and purchase orders.
+        </p>
+        <div class="cta-actions">
+          <a class="btn-solid" href="/contact?topic=quote">Request a quote</a>
+          <a class="btn-secondary" href="/educators">For educators</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro {
+    max-width: 62ch;
+    margin-top: 0.75rem;
+  }
+
+  .kit-list {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  /* Rows read better with a reading-width cap than stretched to 1180px. */
+  .kit-list.is-row {
+    grid-template-columns: 1fr;
+    max-width: 1000px;
+  }
+
+  .kit-list.is-grid {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 640px) {
+    .kit-list.is-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .kit-list.is-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .upcoming-block {
+    max-width: 1000px;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .upcoming-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+
+  .upcoming-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

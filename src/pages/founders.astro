@@ -1,24 +1,39 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import estebanHeadshot from '../assets/images/esteban-headshot.jpg';
+import prestonHeadshot from '../assets/images/preston-headshot.jpg';
 ---
-<Layout title="Founders — Team">
+<Layout
+  title="Founders"
+  description="Meet the founders of HANDS: Esteban Gardea and Preston Roser, building tactile STEM kits for K-12 classrooms."
+>
   <section class="section">
     <p class="kicker">Founders</p>
+    <h1 class="h1">The team behind HANDS</h1>
+    <p class="lead" style="margin-top:.75rem;max-width:60ch">
+      HANDS started with a prototype, a conversation, and a shared belief that students
+      learn science best when they can hold it.
+    </p>
+
+    <div class="hr"></div>
+
     <div class="grid-vertical grid-vertical--spaced" style="margin-top:1.25rem">
 
       <!-- Esteban -->
       <div class="person">
-        <img
-          src="/images/esteban-headshot.png"
-          alt="Esteban Gardea headshot"
+        <Image
+          src={estebanHeadshot}
+          alt="Esteban Gardea"
           class="headshot"
+          width={300}
+          widths={[150, 300]}
+          sizes="150px"
           loading="lazy"
-          width="160"
-          height="160"
         />
 
         <div class="person-body">
-          <h1 class="h1">Esteban Gardea - Founder</h1>
+          <h2 class="h1">Esteban Gardea - Founder</h2>
           <p class="muted">
             Studying biochemical engineering at Arizona State University.
             Focused on HANDS: Product design, 3-D printing, and kit to classroom usability.
@@ -94,17 +109,18 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Preston -->
       <div class="person">
-        <img
-          src="/images/preston-headshot.png"
-          alt="Preston Roser headshot"
+        <Image
+          src={prestonHeadshot}
+          alt="Preston Roser"
           class="headshot"
+          width={300}
+          widths={[150, 300]}
+          sizes="150px"
           loading="lazy"
-          width="160"
-          height="160"
         />
 
         <div class="person-body">
-          <h1 class="h1">Preston Roser - Co-Founder</h1>
+          <h2 class="h1">Preston Roser - Co-Founder</h2>
           <p class="muted">
             Studying Computer Science at Arizona State University.
             Focused on HANDS: Curriculum, software, and general outreach.

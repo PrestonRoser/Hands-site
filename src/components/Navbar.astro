@@ -1,234 +1,445 @@
 ---
-const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/product", label: "Product" },
-  { href: "/mission", label: "Mission" },
-  { href: "/founders", label: "Founders" },
-  { href: "/contact", label: "Contact" },
-  { href: "/venture", label: "Venture" },
-  { href: "/research", label: "Research" },
-  { href: "/faq", label: "FAQ" },
+import { site, contact, features, platformUrl } from '../lib/site';
+
+/**
+ * Primary navigation.
+ *
+ * Grouped into four destinations instead of eight flat links. Resources and
+ * Company are disclosure menus; Kits and Educators are direct links. The sign-in
+ * entry point appears only when `features.platform.enabled` is true, so the site
+ * never links to a subdomain that does not exist yet.
+ */
+
+type NavChild = { href: string; label: string; description?: string };
+type NavItem = { href?: string; label: string; children?: NavChild[] };
+
+const NAV: NavItem[] = [
+  { href: '/kits', label: 'Kits' },
+  { href: '/educators', label: 'Educators' },
+  {
+    label: 'Resources',
+    children: [
+      { href: '/research', label: 'Research', description: 'Why hands-on learning works' },
+      { href: '/faq', label: 'FAQ', description: 'Kits, ordering, and materials' },
+    ],
+  },
+  {
+    label: 'Company',
+    children: [
+      { href: '/mission', label: 'Mission', description: 'What we are building and why' },
+      { href: '/founders', label: 'Founders', description: 'The team behind HANDS' },
+      { href: '/venture', label: 'Venture', description: 'Pilots, traction, and roadmap' },
+      { href: '/contact', label: 'Contact', description: 'Quotes, pilots, partnerships' },
+    ],
+  },
 ];
 
 const path = Astro.url.pathname;
-const email = 'sproutforged@gmail.com';
-const instagram = 'https://www.instagram.com/hand.slearning/';
-const etsy = "https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-stem-learning-kit?etsrc=sdt";
-const logoPath = "/images/hands-logo-lossless.webp";
+
+function isActive(href?: string): boolean {
+  if (!href) return false;
+  if (href === '/') return path === '/';
+  return path === href || path.startsWith(`${href}/`);
+}
+
+function groupActive(item: NavItem): boolean {
+  if (isActive(item.href)) return true;
+  return (item.children ?? []).some((c) => isActive(c.href));
+}
 ---
 
 <header class="nav-root">
-  <div class="nav-inner">
-    <!-- Brand -->
+  <div class="nav-inner container">
     <div class="brand">
-      <a href="/" aria-label="HANDS — Home">
-        <img src={logoPath} alt="HANDS logo" class="logo" width="24" height="24" decoding="async" />
-        <span>HANDS</span>
+      <a href="/" aria-label={`${site.name} — Home`}>
+        <img
+          src={site.logo}
+          alt=""
+          class="logo"
+          width="22"
+          height="22"
+          decoding="async"
+        />
+        <span>{site.name}</span>
       </a>
     </div>
 
-    <!-- Center navigation (hidden on mobile) -->
     <nav class="nav-center" aria-label="Primary">
-      {LINKS.map((l) => (
-        <a
-          class="btn-ghost"
-          href={l.href}
-          aria-current={path === l.href ? "page" : undefined}
-        >
-          {l.label}
-        </a>
-      ))}
+      <ul class="nav-list">
+        {
+          NAV.map((item) =>
+            item.children ? (
+              <li class="nav-item has-menu">
+                <button
+                  type="button"
+                  class="nav-trigger"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  data-menu-trigger
+                  data-current={groupActive(item) ? 'true' : undefined}
+                >
+                  {item.label}
+                  <svg
+                    class="chev"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <ul class="nav-menu" data-menu-panel hidden>
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        aria-current={isActive(child.href) ? 'page' : undefined}
+                      >
+                        <span class="menu-label">{child.label}</span>
+                        {child.description && (
+                          <span class="menu-desc">{child.description}</span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li class="nav-item">
+                <a
+                  class="nav-anchor"
+                  href={item.href}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
     </nav>
 
-    <!-- Actions -->
     <div class="nav-actions">
-      <!-- Desktop icons (hidden on small screens) -->
-      <div class="desktop-icons">
-        <!-- Cart / Etsy -->
-        <a
-          class="icon-btn focus-ring"
-          href={etsy}
-          target="_blank"
-          rel="noopener"
-          aria-label="View on Etsy"
-          title="View on Etsy"
-        >
-          <img
-            src="/images/cart.svg"
-            alt="Cart icon"
-            width="18"
-            height="18"
-            loading="lazy"
-          />
-        </a>
+      {
+        features.platform.enabled && (
+          <a class="btn-ghost sign-in" href={platformUrl(features.platform.signInPath)}>
+            Sign in
+          </a>
+        )
+      }
+      <a class="btn-solid nav-cta" href="/kits/dna-rna-assembly-kit">Get the kit</a>
 
-        <!-- Email -->
-        <a
-          class="icon-btn focus-ring"
-          href={"mailto:" + email}
-          aria-label="Email"
-          title="Email"
-        >
-          <img
-            src="/images/email.svg"
-            alt="Email icon"
-            width="18"
-            height="18"
-            loading="lazy"
-          />
-        </a>
-
-        <!-- Instagram -->
-        <a
-          class="icon-btn focus-ring"
-          href={instagram}
-          target="_blank"
-          rel="noopener"
-          aria-label="Instagram"
-          title="Instagram"
-        >
-          <img
-            src="/images/instagram.svg"
-            alt="Instagram icon"
-            width="18"
-            height="18"
-            loading="lazy"
-          />
-        </a>
-      </div>
-
-      <!-- Mobile menu toggle -->
       <details class="menu">
         <summary class="icon-btn focus-ring" aria-label="Open menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
             <path d="M3 6h18M3 12h18M3 18h18" />
           </svg>
         </summary>
-        <div class="sheet" role="menu">
-          {LINKS.map((l) => (
-            <a role="menuitem" href={l.href} aria-current={path === l.href ? "page" : undefined}>
-              {l.label}
-            </a>
-          ))}
-          <hr class="separator" />
-          <a role="menuitem" href={etsy} target="_blank" rel="noopener">Shop on Etsy</a>
-          <a role="menuitem" href={"mailto:" + email}>Email Us</a>
-          <a role="menuitem" href={instagram} target="_blank" rel="noopener">Instagram</a>
+        <div class="sheet">
+          <nav aria-label="Mobile">
+            <ul class="sheet-list">
+              {
+                NAV.map((item) =>
+                  item.children ? (
+                    <li class="sheet-group">
+                      <p class="sheet-group-title">{item.label}</p>
+                      <ul>
+                        {item.children.map((child) => (
+                          <li>
+                            <a
+                              href={child.href}
+                              aria-current={isActive(child.href) ? 'page' : undefined}
+                            >
+                              {child.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ) : (
+                    <li>
+                      <a
+                        href={item.href}
+                        aria-current={isActive(item.href) ? 'page' : undefined}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ),
+                )
+              }
+              <li class="sheet-group">
+                <p class="sheet-group-title">Connect</p>
+                <ul>
+                  {features.platform.enabled && (
+                    <li>
+                      <a href={platformUrl(features.platform.signInPath)}>Sign in</a>
+                    </li>
+                  )}
+                  <li><a href={`mailto:${contact.email}`}>Email us</a></li>
+                  <li>
+                    <a href={contact.instagram} target="_blank" rel="noopener">
+                      Instagram
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
         </div>
       </details>
     </div>
   </div>
-  
-  <script>
-  document.addEventListener('click', (event) => {
-    const menu = document.querySelector('.menu');
-    if (!menu) return;
-    if (menu.hasAttribute('open') && !menu.contains(event.target as Node)) {
-      menu.removeAttribute('open');
-    }
-  });
-  </script>
 </header>
 
-<style>
-  .nav-root {
-    background: rgba(255,255,255,0.88);
-    backdrop-filter: saturate(180%) blur(10px);
-    border-bottom: 1px solid rgba(59,124,255,0.15);
+<script>
+  // Disclosure menus. Click to toggle, Escape to close and restore focus,
+  // outside click or focus leaving the group closes it.
+  const groups = document.querySelectorAll<HTMLElement>('.has-menu');
+
+  function closeAll(except?: Element) {
+    groups.forEach((group) => {
+      if (group === except) return;
+      const trigger = group.querySelector<HTMLButtonElement>('[data-menu-trigger]');
+      const panel = group.querySelector<HTMLElement>('[data-menu-panel]');
+      if (!trigger || !panel) return;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    });
   }
 
+  groups.forEach((group) => {
+    const trigger = group.querySelector<HTMLButtonElement>('[data-menu-trigger]');
+    const panel = group.querySelector<HTMLElement>('[data-menu-panel]');
+    if (!trigger || !panel) return;
+
+    trigger.addEventListener('click', () => {
+      const open = trigger.getAttribute('aria-expanded') === 'true';
+      closeAll(group);
+      trigger.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+    });
+
+    group.addEventListener('keydown', (event) => {
+      if ((event as KeyboardEvent).key === 'Escape') {
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+        trigger.focus();
+      }
+    });
+
+    group.addEventListener('focusout', (event) => {
+      const next = (event as FocusEvent).relatedTarget as Node | null;
+      if (next && group.contains(next)) return;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as Node;
+    if (![...groups].some((g) => g.contains(target))) closeAll();
+
+    const mobile = document.querySelector('.menu');
+    if (mobile?.hasAttribute('open') && !mobile.contains(target)) {
+      mobile.removeAttribute('open');
+    }
+  });
+</script>
+
+<style>
   .nav-inner {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 0 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 64px;
+    min-height: var(--header-h);
     gap: 1rem;
   }
 
-  /* Brand styling */
   .brand a {
-    display: inline-flex; 
-    align-items: center; 
-    gap: .5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-family: var(--font-display);
     font-weight: 800;
-    color: #1e3a8a;
+    color: var(--brand-deep);
     font-size: 1.125rem;
     letter-spacing: 0.2px;
-    text-decoration: none;
     white-space: nowrap;
   }
-  
+
   .brand .logo {
-    height: 22px; 
-    width: 22px;
-    border-radius: .5rem;
-    box-shadow: 0 0 0 1px rgba(31,75,184,.08);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 1px rgba(31, 75, 184, 0.08);
     flex-shrink: 0;
   }
 
-  /* Center navigation - hidden on mobile */
   .nav-center {
     display: none;
-    align-items: center;
-    gap: .5rem;
   }
-  
+
   @media (min-width: 940px) {
     .nav-center {
-      display: flex;
+      display: block;
       flex: 1;
-      justify-content: center;
-      max-width: 800px;
-      margin: 0 auto;
     }
   }
 
-  /* Action buttons */
+  .nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-anchor,
+  .nav-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    background: transparent;
+    border: 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nav-anchor:hover,
+  .nav-trigger:hover {
+    background: var(--brand-tint);
+    color: var(--brand-interactive);
+  }
+
+  .nav-anchor[aria-current='page'],
+  .nav-trigger[data-current='true'] {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
+    font-weight: 600;
+  }
+
+  .nav-trigger[aria-expanded='true'] .chev {
+    transform: rotate(180deg);
+  }
+
+  .chev {
+    transition: transform 0.15s ease;
+  }
+
+  .nav-menu {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 8px);
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    min-width: 260px;
+    z-index: 60;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 0.6rem 0.7rem;
+    border-radius: 10px;
+  }
+
+  .nav-menu a:hover {
+    background: var(--brand-tint);
+  }
+
+  .nav-menu a[aria-current='page'] {
+    background: var(--color-brand-100);
+  }
+
+  .menu-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .menu-desc {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
   .nav-actions {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
 
-  /* Desktop icons - hidden on mobile */
-  .desktop-icons {
+  .sign-in {
     display: none;
-    align-items: center;
-    gap: 0.5rem;
   }
-  
+
   @media (min-width: 640px) {
-    .desktop-icons {
-      display: flex;
+    .sign-in {
+      display: inline-flex;
     }
   }
 
-  /* Mobile menu */
-  .menu { 
+  .nav-cta {
+    display: none;
+  }
+
+  @media (min-width: 480px) {
+    .nav-cta {
+      display: inline-flex;
+    }
+  }
+
+  .menu {
     position: relative;
     display: block;
   }
-  
+
   @media (min-width: 940px) {
     .menu {
       display: none;
     }
   }
-  
+
   .menu summary {
     list-style: none;
     cursor: pointer;
   }
-  
+
   .menu summary::marker,
   .menu summary::-webkit-details-marker {
     display: none;
   }
-  
+
   .sheet {
     position: absolute;
     right: 0;
@@ -237,47 +448,58 @@ const logoPath = "/images/hands-logo-lossless.webp";
     border: 1px solid var(--border);
     border-radius: 14px;
     box-shadow: var(--shadow);
-    min-width: 240px;
-    max-width: 280px;
-    overflow: hidden;
-    display: none;
-    padding: 0.25rem 0;
+    min-width: 260px;
+    max-width: 300px;
+    max-height: min(70vh, 520px);
+    overflow-y: auto;
+    padding: 0.5rem;
     z-index: 100;
   }
-  
-  details[open] .sheet { 
-    display: flex; 
-    flex-direction: column; 
+
+  .sheet-list,
+  .sheet-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
-  
-  .sheet a { 
-    display: block; 
-    padding: 0.85rem 1rem; 
-    color: var(--text); 
-    text-decoration: none; 
-    white-space: nowrap;
-    transition: background-color 0.15s ease;
+
+  .sheet-list a {
+    display: block;
+    padding: 0.7rem 0.65rem;
+    border-radius: 10px;
+    color: var(--text);
   }
-  
-  .sheet a:hover {
-    background: rgb(230,240,255);
-    color: rgb(31,75,184);
+
+  .sheet-list a:hover {
+    background: var(--brand-tint);
+    color: var(--brand-interactive);
   }
-  
-  .sheet a[aria-current="page"] {
-    background: rgb(219,234,254);
-    color: rgb(29,78,216);
+
+  .sheet-list a[aria-current='page'] {
+    background: var(--color-brand-100);
+    color: var(--color-brand-800);
     font-weight: 600;
   }
-  
-  .sheet a + a { 
-    border-top: 1px solid var(--border); 
+
+  .sheet-group {
+    margin-top: 0.35rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid var(--border);
   }
-  
-  .separator { 
-    border: 0; 
-    height: 1px; 
-    background: var(--border); 
-    margin: .25rem 0; 
+
+  .sheet-group:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .sheet-group-title {
+    margin: 0.35rem 0 0.15rem;
+    padding: 0 0.65rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 </style>

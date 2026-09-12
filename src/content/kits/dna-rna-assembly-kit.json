@@ -1,0 +1,81 @@
+{
+  "sku": "HANDS-DNA-001",
+  "name": "DNA & RNA Assembly Kit",
+  "tagline": "Learn DNA and RNA by building them",
+  "summary": "A tactile classroom kit that turns genetics into action. Students build strands, practice base pairing, and model transcription and translation with colour-coded, reusable parts and teacher-ready guides.",
+  "status": "available",
+  "price": null,
+  "purchase": {
+    "channel": "etsy",
+    "etsyUrl": "https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-stem-learning-kit?etsrc=sdt",
+    "stripePriceId": null,
+    "quoteAvailable": true
+  },
+  "images": [
+    {
+      "src": "../../assets/images/assembled-kit.jpg",
+      "alt": "Assembled DNA and RNA model built from the HANDS kit"
+    },
+    {
+      "src": "../../assets/images/full-kit.jpg",
+      "alt": "The complete HANDS DNA and RNA Assembly Kit with all colour-coded pieces laid out"
+    },
+    {
+      "src": "../../assets/images/assembled-student-kit.jpg",
+      "alt": "A student-sized DNA and RNA model assembled on a desk"
+    }
+  ],
+  "subjects": ["Biology", "Genetics", "Molecular Biology"],
+  "gradeBands": ["Middle school", "High school"],
+  "ageMin": 10,
+  "groupSize": { "min": 2, "max": 4 },
+  "activityMinutes": { "min": 15, "max": 45 },
+  "standards": ["NGSS HS-LS1-1"],
+  "includes": [
+    "Colour-coded nucleotide bases: adenine, thymine, uracil, cytosine, guanine, and 5-methylcytosine",
+    "Beige sugar-phosphate backbone pieces with orange phosphate units",
+    "Mini codon chart card covering 20 amino acids and the three stop codons",
+    "Three printable lessons with guided activities, practice exercises, and reflection questions",
+    "Molecular genetics overview guide and a classroom presentation"
+  ],
+  "materials": [
+    "3D-printed in durable, recyclable PLA",
+    "Colours chosen for clarity and contrast",
+    "Wipe clean with mild soap and water"
+  ],
+  "teaches": [
+    { "term": "DNA ↔ RNA", "detail": "Base pairing and the thymine to uracil swap" },
+    { "term": "Transcription", "detail": "Coding strand to RNA, 5′ to 3′" },
+    { "term": "Translation", "detail": "Codons, the codon chart, and amino acids" },
+    { "term": "Mutations", "detail": "Silent, missense, and nonsense effects" },
+    { "term": "Epigenetics", "detail": "Methylated cytosine and gene expression" },
+    { "term": "Classroom ready", "detail": "Activities in 15 to 45 minutes" }
+  ],
+  "learningOutcomes": [
+    "Explain base pairing rules and strand polarity, including 5′ to 3′ direction.",
+    "Transcribe a DNA coding strand into RNA and explain why uracil replaces thymine.",
+    "Divide RNA into codons and translate them into amino acids using a codon chart.",
+    "Classify point mutations as silent, missense, or nonsense and explain their effect on a protein.",
+    "Describe how DNA methylation can change gene expression without altering base pairing."
+  ],
+  "audience": [
+    "Biology teachers seeking fast, tactile activities (15–45 minutes)",
+    "STEM clubs and enrichment programs",
+    "Homeschool families (ages 10+, small parts)"
+  ],
+  "deepDive": [
+    {
+      "title": "Teacher integration",
+      "accent": "mint",
+      "body": "Every lesson follows the same structure: learning goals, a background explanation, a guided step-by-step activity, practice exercises, and reflection questions. The sequence builds deliberately — the mutations lesson reuses the sequences students already transcribed and translated, so each activity reinforces the last."
+    },
+    {
+      "title": "From introductory genetics to AP Biology",
+      "accent": "sand",
+      "body": "Colour coded parts and durable, recyclable PLA make the system work across course levels, from a first genetics unit to AP Biology review. Students do not just read about DNA to RNA to protein, they build it."
+    }
+  ],
+  "lessons": ["transcription", "translation", "mutations"],
+  "featured": true,
+  "order": 1
+}
