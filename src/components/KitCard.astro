@@ -1,0 +1,335 @@
+---
+import { Image } from 'astro:assets';
+import type { Kit } from '../lib/catalog';
+import { formatPrice, formatRange, statusLabel } from '../lib/catalog';
+
+interface Props {
+  kit: Kit;
+  /**
+   * `row` is a full-width horizontal entry — the right choice while the catalog
+   * is small, because a 3-up grid holding one product leaves the page lopsided.
+   * `grid` is the stacked card, used once there are enough kits to fill a row.
+   */
+  variant?: 'row' | 'grid';
+  /** Eager-load the image when this entry is above the fold. */
+  priority?: boolean;
+}
+
+const { kit, variant = 'grid', priority = false } = Astro.props;
+
+const image = kit.images[0];
+const price = formatPrice(kit.price);
+const duration = formatRange(kit.activityMinutes, 'min');
+const groupSize = formatRange(kit.groupSize, 'students');
+const purchasable = kit.status === 'available' || kit.status === 'preorder';
+const badgeClass = kit.status === 'available' ? 'badge-available' : 'badge-dev';
+
+const facts = [
+  duration && { label: 'Activity length', value: duration },
+  groupSize && { label: 'Group size', value: groupSize },
+  kit.standards.length > 0 && { label: 'Designed to support', value: kit.standards.join(', ') },
+].filter(Boolean) as { label: string; value: string }[];
+---
+
+{
+  /*
+    A kit with no imagery is one we have not launched. It gets a quieter entry
+    rather than a large empty placeholder box, which otherwise dominates the page
+    with dead space.
+  */
+  !image ? (
+    <article class="kit-upcoming">
+      <a class="kit-link" href={kit.href}>
+        <span class="sr-only">Learn more about {kit.name}</span>
+      </a>
+      <div class="upcoming-head">
+        <span class:list={['badge', badgeClass]}>{statusLabel(kit.status)}</span>
+        {kit.gradeBands.length > 0 && (
+          <span class="upcoming-grades muted">{kit.gradeBands.join(' · ')}</span>
+        )}
+      </div>
+      <h3 class="h3 upcoming-name">{kit.name}</h3>
+      <p class="muted upcoming-summary">{kit.summary}</p>
+      <span class="kit-cta" aria-hidden="true">
+        Learn more
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
+    </article>
+  ) : (
+    <article class:list={['kit-card', 'card', 'card-hover', `is-${variant}`]}>
+      <a class="kit-link" href={kit.href}>
+        <span class="sr-only">View {kit.name}</span>
+      </a>
+
+      <div class="kit-media">
+        {typeof image.src === 'string' ? (
+          <img src={image.src} alt={image.alt} loading={priority ? 'eager' : 'lazy'} />
+        ) : (
+          <Image
+            src={image.src}
+            alt={image.alt}
+            width={640}
+            widths={[320, 480, 640]}
+            sizes={
+              variant === 'row'
+                ? '(min-width: 900px) 360px, 92vw'
+                : '(min-width: 900px) 360px, (min-width: 640px) 45vw, 90vw'
+            }
+            loading={priority ? 'eager' : 'lazy'}
+            fetchpriority={priority ? 'high' : 'auto'}
+          />
+        )}
+      </div>
+
+      <div class="kit-body">
+        <div class="kit-meta">
+          <span class:list={['badge', badgeClass]}>{statusLabel(kit.status)}</span>
+          {kit.gradeBands.length > 0 && <span class="badge">{kit.gradeBands.join(' · ')}</span>}
+        </div>
+
+        <h3 class="h3 kit-name">{kit.name}</h3>
+        <p class="kit-summary muted">{kit.summary}</p>
+
+        {facts.length > 0 && (
+          <dl class="kit-facts">
+            {facts.map((f) => (
+              <div>
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        <div class="kit-foot">
+          <span class="kit-price">
+            {price ?? (purchasable ? 'See price on Etsy' : 'Not yet available')}
+          </span>
+          <span class="kit-cta" aria-hidden="true">
+            {purchasable ? 'View kit' : 'Learn more'}
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+<style>
+  .kit-card {
+    position: relative;
+    display: flex;
+    padding: 1rem;
+    height: 100%;
+  }
+
+  .kit-link {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  /* ---------- grid variant: stacked card ---------- */
+  .is-grid {
+    flex-direction: column;
+  }
+
+  .is-grid .kit-media {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 1rem;
+  }
+
+  /* ---------- row variant: media beside content ---------- */
+  .is-row {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  /* Stacked on small screens the media keeps a 4:3 frame; the desktop rule
+     below releases it so the media matches the height of the text beside it.
+     This must come before the media query — same specificity, so whichever
+     is written last would otherwise win regardless of viewport. */
+  .is-row .kit-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (min-width: 760px) {
+    .is-row {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 1.5rem;
+      padding: 1.25rem;
+    }
+
+    .is-row .kit-media {
+      flex: 0 0 clamp(260px, 34%, 380px);
+      margin-bottom: 0;
+      aspect-ratio: auto;
+      min-height: 260px;
+    }
+
+    .is-row .kit-body {
+      padding: 0.35rem 0.25rem 0.35rem 0;
+    }
+  }
+
+  .kit-media {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafbff;
+  }
+
+  .kit-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0.75rem;
+    transition: transform 0.2s ease;
+  }
+
+  .kit-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .kit-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .kit-name {
+    margin-top: 0.15rem;
+  }
+
+  .kit-summary {
+    font-size: 0.93rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  .kit-facts {
+    margin: 0.5rem 0 0;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+  }
+
+  .kit-facts div {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .kit-facts dt {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .kit-facts dt::after {
+    content: ':';
+  }
+
+  .kit-facts dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .kit-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .kit-price {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .kit-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--brand-dark);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+
+  .card-hover:hover .kit-media :global(img) {
+    transform: translateY(-2px) scale(1.01);
+  }
+
+  /* ---------- unlaunched kit: quiet entry, no empty media box ---------- */
+  .kit-upcoming {
+    position: relative;
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .kit-upcoming:hover {
+    border-color: var(--color-brand-300);
+    background: #fff;
+  }
+
+  .upcoming-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .upcoming-grades {
+    font-size: 0.85rem;
+  }
+
+  .upcoming-name {
+    margin-top: 0.1rem;
+  }
+
+  .upcoming-summary {
+    font-size: 0.93rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 68ch;
+  }
+
+  .kit-upcoming .kit-cta {
+    margin-top: 0.35rem;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
