@@ -1,0 +1,16 @@
+{
+  "title": "RNA to Amino Acids (Translation)",
+  "summary": "Students divide a six-base RNA sequence into two codons and read each one against the codon chart, building a two-amino-acid chain and meeting the start and stop codons.",
+  "order": 2,
+  "kit": "dna-rna-assembly-kit",
+  "activityMinutes": null,
+  "standards": [],
+  "outcomes": [
+    "Divide an RNA sequence into codons (groups of three bases).",
+    "Use a codon chart to determine which amino acids correspond to each codon.",
+    "Explain the role of the start codon (AUG) and stop codons in translation.",
+    "Understand how proteins are built one amino acid at a time."
+  ],
+  "access": "gated",
+  "advanced": false
+}

@@ -1,0 +1,16 @@
+{
+  "title": "DNA to RNA (Transcription)",
+  "summary": "Students build a six-base DNA coding strand with the kit, then transcribe it into RNA by replacing thymine with uracil and leaving adenine, cytosine, and guanine unchanged.",
+  "order": 1,
+  "kit": "dna-rna-assembly-kit",
+  "activityMinutes": null,
+  "standards": [],
+  "outcomes": [
+    "Describe the role of DNA and RNA in the flow of genetic information.",
+    "Identify the differences between DNA and RNA nucleotides.",
+    "Accurately transcribe a short DNA coding strand into RNA using base-pairing rules.",
+    "Explain why transcription is the first step in building proteins."
+  ],
+  "access": "gated",
+  "advanced": false
+}
