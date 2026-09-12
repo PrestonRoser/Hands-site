@@ -1,68 +1,210 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { contact } from '../lib/site';
+
+/**
+ * Topics are preselected from `?topic=` by a small inline script rather than at
+ * build time — this is a static page, so the query string is only available in
+ * the browser.
+ */
+const TOPICS = [
+  { value: 'quote', label: 'Classroom or district quote' },
+  { value: 'pilot', label: 'Pilot program' },
+  { value: 'order', label: 'Question about an order' },
+  { value: 'partnership', label: 'Partnership or press' },
+  { value: 'other', label: 'Something else' },
+];
+
+const ROLES = [
+  { value: 'teacher', label: 'Teacher' },
+  { value: 'admin', label: 'School or district administrator' },
+  { value: 'parent', label: 'Parent or homeschool educator' },
+  { value: 'student', label: 'Student' },
+  { value: 'other', label: 'Other' },
+];
 ---
-<Layout title="Contact — Get Details">
+
+<Layout
+  title="Contact"
+  description="Get in touch about classroom quotes, purchase orders, pilot programs, or partnerships with HANDS."
+  contained={false}
+>
   <section class="section">
-    <div>
-      <p class="kicker">Contact</p>
-      <h1 class="lead">Interested in classroom pilots or pricing? Send us a note.</h1>
+    <div class="container contact-layout">
+      <div class="contact-intro">
+        <p class="kicker">Contact</p>
+        <h1 class="h1">Let's talk about your classroom</h1>
+        <p class="lead">
+          Tell us a little about your setting and we will get back to you by email within
+          1–2 business days.
+        </p>
 
-      <hr class="hr" />
+        <dl class="contact-facts">
+          <div>
+            <dt>Email</dt>
+            <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
+          </div>
+          <div>
+            <dt>Instagram</dt>
+            <dd>
+              <a href={contact.instagram} target="_blank" rel="noopener">
+                {contact.instagramHandle}
+              </a>
+            </dd>
+          </div>
+        </dl>
 
-      <form action="https://formspree.io/f/meorkyqz" method="POST" class="card" style="margin-top:1rem">
-        <label style="display:block;margin-top:.75rem">
-          <span>Name</span><br/>
-          <input name="name" required style="width:100%;padding:.8rem;border:1px solid var(--border);border-radius:12px"/>
+        <p class="muted contact-note">
+          Buying for a school or district? We can provide a W-9 and accept purchase
+          orders.
+        </p>
+      </div>
+
+      <form action={contact.formEndpoint} method="POST" class="card contact-form">
+        <label class="field">
+          <span>What is this about?</span>
+          <select class="select" name="topic" id="topic">
+            {TOPICS.map((t) => <option value={t.value}>{t.label}</option>)}
+          </select>
         </label>
 
-        <label style="display:block;margin-top:.75rem">
-          <span>Email</span><br/>
-          <input type="email" name="email" required style="width:100%;
-        padding:.8rem;
-        border:1px solid var(--border);
-        border-radius:12px"
-      />
+        <label class="field">
+          <span>Your role</span>
+          <select class="select" name="role">
+            {ROLES.map((r) => <option value={r.value}>{r.label}</option>)}
+          </select>
         </label>
 
-        <label style="display:block;margin-top:.75rem">
-          <span>Message</span><br/>
-          <textarea name="message" rows="4" required 
-        style="width:100%;
-        padding:.8rem;
-        border:1px solid var(--border);
-        border-radius:12px;
-        resize: none;"
-      ></textarea>
+        <label class="field">
+          <span>Name</span>
+          <input class="input" name="name" autocomplete="name" required />
         </label>
 
-        <input type="hidden" name="_subject" value="Website contact: DNA Assembly Education" />
-        <button type="submit" class="btn-primary" style="margin-top:1rem">Send message</button>
-        <p class="muted" style="margin-top:.5rem">We'll reply by email within 1–2 business days.</p>
+        <label class="field">
+          <span>Email</span>
+          <input class="input" type="email" name="email" autocomplete="email" required />
+        </label>
+
+        <label class="field">
+          <span>School or organization <span class="optional">(optional)</span></span>
+          <input class="input" name="organization" autocomplete="organization" />
+        </label>
+
+        <label class="field">
+          <span>Message</span>
+          <textarea class="textarea" name="message" rows="5" required></textarea>
+          <span class="field-hint">
+            Grade level, class size, and timeline are the most useful details for a quote.
+          </span>
+        </label>
+
+        <!-- Honeypot: hidden from users, filled in by bots. -->
+        <div class="hp" aria-hidden="true">
+          <label>
+            Leave this field empty
+            <input name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+
+        <input type="hidden" name="_subject" value="HANDS website enquiry" />
+
+        <button type="submit" class="btn-solid submit">Send message</button>
+        <p class="field-hint">We reply by email within 1–2 business days.</p>
       </form>
-
     </div>
   </section>
 </Layout>
 
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const topic = params.get('topic');
+  const select = document.getElementById('topic') as HTMLSelectElement | null;
+  if (topic && select) {
+    const match = [...select.options].find((o) => o.value === topic);
+    if (match) select.value = topic;
+  }
+</script>
+
 <style>
-  /* Responsive wrapper */
-  section > div {
-    max-width: 50%;
-    margin: 0 auto;
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
   }
 
-  /* Tablet: 75% width */
-  @media (max-width: 1024px) and (min-width: 769px) {
-    section > div {
-      max-width: 75%;
+  @media (min-width: 900px) {
+    .contact-layout {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 3rem;
     }
   }
 
-  /* Mobile: full width, no extra padding needed */
-  @media (max-width: 768px) {
-    section > div {
-      max-width: 100%;
-      margin: 0;
+  .contact-intro .lead {
+    margin-top: 0.75rem;
+    max-width: 46ch;
+  }
+
+  .contact-facts {
+    margin: 1.75rem 0 0;
+    display: grid;
+    gap: 0.75rem;
+    font-size: 0.93rem;
+  }
+
+  .contact-facts dt {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .contact-facts dd {
+    margin: 0.15rem 0 0;
+  }
+
+  .contact-facts a {
+    color: var(--brand-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .contact-note {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    max-width: 42ch;
+  }
+
+  .contact-form {
+    padding: 1.5rem 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .contact-form {
+      padding: 1.75rem 1.5rem;
     }
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .submit {
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+
+  @media (min-width: 560px) {
+    .submit {
+      width: auto;
+    }
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 </style>

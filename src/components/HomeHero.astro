@@ -1,23 +1,95 @@
 ---
-const etsy = "https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-stem-learning-kit?etsrc=sdt";
-const instagram = "https://instagram.com/sproutforged";
+import { Image } from 'astro:assets';
+import fullKit from '../assets/images/full-kit.jpg';
 ---
-<section class="section grid-2" style="align-items:center">
-  <div>
-    <p class="kicker">Reinventing STEM education with hands-on learning</p>
-    <h1 class="h1">Hands: bring learning to life in your classroom</h1>
-    <p class="lead">
-      Tactile kits that turn abstract concepts into action. Start with our DNA Assembly Kit for Molecular Biology directed curriculum, aligned to NGSS and designed for fast, teacher-ready activities.
-    </p>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
-      <a class="btn-primary" href="/product">Explore the DNA kit</a>
-      <a class="btn-primary" href="/contact">Contact us</a>
-      <a class="btn-link" href="https://www.etsy.com/listing/4368469267/3d-dnarna-assembly-kit-stem-learning-kit?etsrc=sdt" target="_blank" rel="noopener">Shop on Etsy</a>
-      <a class="btn-link" href="https://www.instagram.com/hand.slearning/" target="_blank" rel="noopener">Follow on Instagram</a>
+
+<section class="section hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="kicker">Reinventing STEM education with hands-on learning</p>
+      <h1 class="h1">Bring learning to life in your classroom</h1>
+      <p class="lead hero-lead">
+        Tactile kits that turn abstract concepts into action. Start with the DNA &amp; RNA
+        Assembly Kit — aligned to NGSS, built with educators, and designed for activities
+        that fit a single class period.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn-solid" href="/kits/dna-rna-assembly-kit">Explore the DNA kit</a>
+        <a class="btn-secondary" href="/educators">For educators</a>
+      </div>
+
+      <ul class="hero-proof">
+        <li>8 classroom pilots</li>
+        <li>NGSS aligned</li>
+        <li>15–45 minute activities</li>
+      </ul>
     </div>
-  </div>
-  <div>
-    <img src="/images/full-kit.png" class="hero-img" alt="Full Hands DNA Assembly Kit" />
+
+    <div class="hero-media">
+      <Image
+        src={fullKit}
+        alt="The complete HANDS DNA and RNA Assembly Kit with colour-coded pieces laid out"
+        class="hero-img"
+        width={1100}
+        widths={[480, 768, 1100]}
+        sizes="(min-width: 960px) 520px, 94vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
   </div>
 </section>
 
+<style>
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 3rem;
+    }
+  }
+
+  .hero-lead {
+    margin-top: 0.85rem;
+    max-width: 56ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .hero-proof {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .hero-proof li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .hero-proof li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand);
+  }
+</style>

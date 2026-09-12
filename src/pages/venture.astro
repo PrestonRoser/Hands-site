@@ -1,7 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Venture — Traction & Roadmap">
+<Layout
+  title="Venture"
+  description="Pilot programs, traction, and the HANDS roadmap, including Venture Devils support from ASU Edson E+I."
+>
   <section class="section">
     <p class="kicker">Updates</p>
     <h1 class="h1">Pilots and Roadmap</h1>
@@ -99,8 +102,8 @@ import Layout from '../layouts/Layout.astro';
         <div class="cta-title">Partner with our pilot program</div>
         <p class="cta-subtext">Interested in hosting a classroom pilot or reviewing materials, we would love to work with you.</p>
         <div class="cta-actions">
-          <a class="btn-primary" href="/contact">Request a pilot</a>
-          <a class="btn-link" href="/product">See the DNA kit</a>
+          <a class="btn-solid" href="/contact?topic=pilot">Request a pilot</a>
+          <a class="btn-secondary" href="/kits/dna-rna-assembly-kit">See the DNA kit</a>
         </div>
       </div>
     </section>
@@ -143,7 +146,7 @@ import Layout from '../layouts/Layout.astro';
 /* dot for each step */
 .dot {
   width: 12px; height: 12px; border-radius: 9999px;
-  background: rgb(var(--color-mint-400));
+  background: var(--color-mint-400);
   border: 2px solid rgb(31,75,184);
   position: relative;
   margin-bottom: .35rem;

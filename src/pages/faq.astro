@@ -2,13 +2,36 @@
 import Layout from '../layouts/Layout.astro';
 import FAQList from '../components/FAQList.astro';
 ---
-<Layout title="FAQ — DNA Assembly Education">
-  <section class="section">
-    <p class="kicker">Frequently Asked Questions</p>
-    <h1 class="lead">Quick answers to common questions about the kit, materials, and ordering.</h1>
-    <div class="hr"></div>
 
-    <FAQList mode="full" />
+<Layout
+  title="FAQ"
+  description="Answers about HANDS kits, classroom activities, materials, educator pricing, purchase orders, and shipping."
+>
+  <section class="section faq-page">
+    <p class="kicker">Support</p>
+    <h1 class="h1">Frequently asked questions</h1>
+    <p class="lead faq-intro">
+      Quick answers about the kits, materials, and ordering. Can’t find what you need?
+      <a href="/contact">Send us a note</a> and we’ll reply within 1–2 business days.
+    </p>
+
+    <FAQList mode="full" search />
   </section>
 </Layout>
 
+<style>
+  /* FAQ content reads better in a narrower column than the full page width. */
+  .faq-page {
+    max-width: 760px;
+  }
+
+  .faq-intro {
+    margin: 0.75rem 0 2rem;
+  }
+
+  .faq-intro a {
+    color: var(--brand-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

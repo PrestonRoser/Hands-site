@@ -1,32 +1,85 @@
 ---
----
-<section class="section" style="padding-top:0">
-  <h2 class="h2" style="text-align:center">Reviews & pilots</h2>
+const PROOF = [
+  {
+    label: 'Recognition',
+    value: 'Venture Devils',
+    detail: 'ASU Edson E+I seed funding',
+  },
+  {
+    label: 'Completed pilots',
+    value: '8 classrooms',
+    detail: "'25–'26, Phoenix, AZ",
+  },
+  {
+    label: 'Etsy reviews',
+    value: '★★★★★',
+    detail: 'From early classroom orders',
+  },
+];
 
-  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;max-width:900px;margin:1rem auto">
-    <div class="card" style="text-align:center">
-      <p class="muted" style="margin:0"></p>
-      <p class="h3" style="margin:.25rem 0 0">ASU Recognized</p>
-      <p class="muted" style="margin:.25rem 0 0"></p>
-    </div>
-    <div class="card" style="text-align:center">
-      <p class="muted" style="margin:0">Etsy Reviews</p>
-      <p class="h3" style="margin:.25rem 0 0">★ ★ ★ ★ ★</p>
-      <p class="muted" style="margin:.25rem 0 0"></p>
-    </div>
-    <div class="card" style="text-align:center">
-      <p class="muted" style="margin:0">8 Complete Pilots</p>
-      <p class="h3" style="margin:.25rem 0 0">'25 - '26</p>
-      <p class="muted" style="margin:.25rem 0 0">Phoenix, AZ</p>
-    </div>
+const AUDIENCES = [
+  'Middle to high-school biology programs',
+  'STEM clubs',
+  'Homeschool',
+];
+---
+
+<section class="section" style="padding-top:0">
+  <h2 class="h2 proof-title">Reviews and pilots</h2>
+
+  <div class="stat-grid">
+    {
+      PROOF.map((p) => (
+        <div class="card proof-card">
+          <p class="proof-label muted">{p.label}</p>
+          <p class="h3 proof-value">{p.value}</p>
+          <p class="proof-detail muted">{p.detail}</p>
+        </div>
+      ))
+    }
   </div>
 
-  <div style="display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:center;margin-top:1rem">
+  <div class="audiences">
     <span class="muted">Trusted by</span>
-    <span class="pill">Middle to high-school biology programs</span>
-    <span class="pill">STEM clubs</span>
-    <span class="pill">Homeschool</span>
+    {AUDIENCES.map((a) => <span class="pill audience-pill">{a}</span>)}
   </div>
 </section>
 
+<style>
+  .proof-title {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
 
+  .proof-card {
+    text-align: center;
+    padding: 1.25rem 1rem;
+  }
+
+  .proof-label {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .proof-value {
+    margin: 0.3rem 0 0;
+  }
+
+  .proof-detail {
+    margin: 0.3rem 0 0;
+    font-size: 0.88rem;
+  }
+
+  .audiences {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .audience-pill {
+    font-size: 0.9rem;
+  }
+</style>
