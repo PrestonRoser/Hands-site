@@ -1,0 +1,55 @@
+---
+import { site } from '../lib/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Absolute or root-relative image path used for social previews. */
+  image?: string;
+  /** Defaults to the current page URL. */
+  canonical?: string;
+  noindex?: boolean;
+  /** Structured data objects, serialised into ld+json script tags. */
+  jsonLd?: Record<string, unknown>[];
+  /** Set on article-style pages. */
+  type?: 'website' | 'article' | 'product';
+}
+
+const {
+  title,
+  description = site.description,
+  image = site.ogImage,
+  canonical,
+  noindex = false,
+  jsonLd = [],
+  type = 'website',
+} = Astro.props;
+
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, site.url).href;
+const imageUrl = new URL(image, site.url).href;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:site_name" content={site.name} />
+<meta property="og:type" content={type === 'product' ? 'website' : type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+
+{
+  jsonLd.map((data) => (
+    <script type="application/ld+json" set:html={JSON.stringify(data)} />
+  ))
+}

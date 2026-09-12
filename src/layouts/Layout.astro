@@ -1,39 +1,94 @@
 ---
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-const { title = "DNA Assembly Education", description = "Hands-on STEM DNA/mRNA learning kit and classroom resources" } = Astro.props;
-import "../styles/global.css";
+import SEO from '../components/SEO.astro';
+import { site } from '../lib/site';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+  type?: 'website' | 'article' | 'product';
+  /** Appends the brand name to the title. Off for the homepage, which already leads with it. */
+  brandSuffix?: boolean;
+  /**
+   * Wraps the page in the standard 1180px container.
+   *
+   * Pass `false` on pages that lay out their own sections — needed for any page
+   * using full-bleed `.band` sections, since a wrapping container would prevent
+   * them from spanning the viewport.
+   */
+  contained?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  noindex = false,
+  jsonLd = [],
+  type = 'website',
+  brandSuffix = true,
+  contained = true,
+} = Astro.props;
+
+const fullTitle = brandSuffix ? `${title} — ${site.name}` : title;
 ---
+
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
     <link rel="icon" href="/favicon.png" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+    <!-- Self-hosted fonts: preload the two faces used above the fold. -->
+    <link
+      rel="preload"
+      href="/fonts/manrope-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
+    <SEO
+      title={fullTitle}
+      description={description}
+      image={image}
+      noindex={noindex}
+      jsonLd={jsonLd}
+      type={type}
+    />
   </head>
-  <body class="min-h-dvh bg-neutral-50 text-neutral-900">
+  <body class="min-h-dvh">
+    <a class="skip-link" href="#main">Skip to main content</a>
+
     <div class="nav-wrap">
-      <div class="container">
-        <Navbar />
-      </div>
+      <Navbar />
     </div>
 
-    <main class="container">
-      <slot />
+    <main id="main">
+      {
+        contained ? (
+          <div class="container">
+            <slot />
+          </div>
+        ) : (
+          <slot />
+        )
+      }
     </main>
 
-    <footer class="section">
-      <div class="container">
-        <Footer />
-      </div>
-    </footer>
+    <Footer />
   </body>
 </html>
-

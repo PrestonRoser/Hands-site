@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://handslearning.com/sitemap-index.xml
