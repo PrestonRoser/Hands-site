@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  # One grouped PR a week per ecosystem. Ungrouped updates on a repo this size
+  # produce more review noise than they prevent.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns:
+          - astro
+          - '@astrojs/*'
+      dev-dependencies:
+        dependency-type: development
+
+  # Actions are pinned to commit SHAs in the workflows, so these updates are the
+  # only thing that moves them.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - '*'
