@@ -32,8 +32,37 @@ Before opening a pull request:
 ```bash
 npm run check        # astro check — types and content schema
 npm run format:check # prettier, same check CI runs
+npm test             # vitest unit tests
+npm run test:e2e     # playwright, against a production build
 npm run build        # must pass
 ```
+
+## Testing
+
+| Layer         | Tool                                | What it covers                                  |
+| ------------- | ----------------------------------- | ----------------------------------------------- |
+| Unit          | Vitest (`tests/unit/`)              | Purchase routing, formatters, URL composition   |
+| End-to-end    | Playwright (`tests/e2e/`)           | Gallery, routing, buy paths, phone-width layout |
+| Accessibility | axe-core via Playwright             | WCAG 2.2 A/AA across seven pages                |
+| Budgets       | Lighthouse CI (`lighthouserc.json`) | Performance, accessibility, best practices, SEO |
+
+```bash
+npx playwright install chromium   # once, before the first e2e run
+npm run test:e2e
+npm run test:lighthouse           # needs a build in dist/
+```
+
+Three deliberate choices:
+
+- **End-to-end tests run against `astro preview`, not `astro dev`.** The dev server
+  transforms modules on the fly, so it can pass while the built output — the thing that
+  actually ships — is broken.
+- **The preview port is 4327 and an existing server is never reused.** With Astro's
+  default port and `reuseExistingServer`, a run silently adopted an unrelated project's
+  dev server that held 4321 and tested the wrong site entirely.
+- **Unit tests cover the pure logic in `src/lib/` only.** The catalog's data-access
+  functions read real content, so they are exercised by the build and the end-to-end
+  tests; mocking a content store would only assert that the mock works.
 
 ## Project structure
 
