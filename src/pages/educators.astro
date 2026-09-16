@@ -41,13 +41,17 @@ const SUPPORT = [
       <p class="kicker">For educators</p>
       <h1 class="h1">Built with teachers, for real class periods</h1>
       <p class="lead intro">
-        HANDS kits are designed around the constraints teachers actually have: limited
-        minutes, mixed group sizes, and the need to reset quickly between classes. Every
-        kit is refined from classroom pilot feedback.
+        HANDS kits are designed around the constraints teachers actually have: limited minutes,
+        mixed group sizes, and the need to reset quickly between classes. Every kit is refined from
+        classroom pilot feedback.
       </p>
       <div class="head-actions">
-        <a class="btn-solid" href="/contact?topic=quote">Request a quote</a>
-        <a class="btn-secondary" href="/contact?topic=pilot">Join a pilot</a>
+        <a class="btn-solid" href="/contact?topic=quote">
+          Request a quote
+        </a>
+        <a class="btn-secondary" href="/contact?topic=pilot">
+          Join a pilot
+        </a>
       </div>
     </div>
   </section>
@@ -56,100 +60,101 @@ const SUPPORT = [
     <div class="container">
       <h2 class="h2">How it works</h2>
       <ol class="steps">
-        {
-          STEPS.map((step, i) => (
-            <li class="card step">
-              <span class="step-num" aria-hidden="true">{i + 1}</span>
-              <div>
-                <h3 class="h3">{step.title}</h3>
-                <p class="muted step-body">{step.body}</p>
-              </div>
-            </li>
-          ))
-        }
+        {STEPS.map((step, i) => (
+          <li class="card step">
+            <span class="step-num" aria-hidden="true">
+              {i + 1}
+            </span>
+            <div>
+              <h3 class="h3">{step.title}</h3>
+              <p class="muted step-body">{step.body}</p>
+            </div>
+          </li>
+        ))}
       </ol>
     </div>
   </section>
 
-  {
-    featured && (
-      <section class="section">
-        <div class="container">
-          <h2 class="h2">What ships with a kit</h2>
-          <p class="muted lessons-intro">
-            The {featured.name} includes {lessons.length} sequenced lessons
-            {duration && ` designed for ${duration} blocks`}, each with a guided
-            activity, practice exercises, and reflection questions.
-          </p>
+  {featured && (
+    <section class="section">
+      <div class="container">
+        <h2 class="h2">What ships with a kit</h2>
+        <p class="muted lessons-intro">
+          The {featured.name} includes {lessons.length} sequenced lessons
+          {duration && ` designed for ${duration} blocks`}, each with a guided activity, practice
+          exercises, and reflection questions.
+        </p>
 
-          <div class="grid-2-even" style="align-items:start;gap:2rem">
-            <div>
-              <h3 class="h3">Lesson sequence</h3>
-              <ol class="lesson-seq">
-                {lessons.map((lesson) => (
-                  <li>
-                    <strong>{lesson.title}</strong>
-                    <span class="muted"> — {lesson.summary}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            <div>
-              <h3 class="h3">Standards alignment</h3>
-              <p class="muted">
-                The lesson sequence is designed to support{' '}
-                {featured.standards.join(', ')}, which asks students to explain how the
-                structure of DNA determines the structure of proteins. Each lesson opens
-                with explicit learning goals and closes with reflection questions, so it
-                maps onto an existing lesson plan. A dimension-by-dimension crosswalk is
-                available on request.
-              </p>
-
-              <h3 class="h3" style="margin-top:1.5rem">Support for schools</h3>
-              <ul class="bullet-list muted">
-                {SUPPORT.map((s) => (
-                  <li>{s}</li>
-                ))}
-              </ul>
-            </div>
+        <div class="grid-2-even" style="align-items:start;gap:2rem">
+          <div>
+            <h3 class="h3">Lesson sequence</h3>
+            <ol class="lesson-seq">
+              {lessons.map((lesson) => (
+                <li>
+                  <strong>{lesson.title}</strong>
+                  <span class="muted"> — {lesson.summary}</span>
+                </li>
+              ))}
+            </ol>
           </div>
 
-          <p class="kit-link-row">
-            <a class="btn-secondary" href={featured.href}>
-              See the full kit details
-            </a>
-          </p>
-        </div>
-      </section>
-    )
-  }
+          <div>
+            <h3 class="h3">Standards alignment</h3>
+            <p class="muted">
+              The lesson sequence is designed to support {featured.standards.join(', ')}, which asks
+              students to explain how the structure of DNA determines the structure of proteins.
+              Each lesson opens with explicit learning goals and closes with reflection questions,
+              so it maps onto an existing lesson plan. A dimension-by-dimension crosswalk is
+              available on request.
+            </p>
 
-  {
-    features.platform.enabled && (
-      <section class="section band">
-        <div class="container">
-          <h2 class="h2">HANDS Learning Platform</h2>
-          <p class="muted">
-            Schools with a licence access curriculum, track student progress, and manage
-            classroom rosters on the HANDS platform.
-          </p>
+            <h3 class="h3" style="margin-top:1.5rem">
+              Support for schools
+            </h3>
+            <ul class="bullet-list muted">
+              {SUPPORT.map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </section>
-    )
-  }
+
+        <p class="kit-link-row">
+          <a class="btn-secondary" href={featured.href}>
+            See the full kit details
+          </a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  {features.platform.enabled && (
+    <section class="section band">
+      <div class="container">
+        <h2 class="h2">HANDS Learning Platform</h2>
+        <p class="muted">
+          Schools with a licence access curriculum, track student progress, and manage classroom
+          rosters on the HANDS platform.
+        </p>
+      </div>
+    </section>
+  )}
 
   <section class="section">
     <div class="container">
       <div class="cta-band">
         <p class="cta-title">Planning for next semester?</p>
         <p class="cta-subtext">
-          Tell us your grade level, class size, and timeline. We will put together a quote
-          or set up a pilot.
+          Tell us your grade level, class size, and timeline. We will put together a quote or set up
+          a pilot.
         </p>
         <div class="cta-actions">
-          <a class="btn-solid" href="/contact?topic=quote">Request a quote</a>
-          <a class="btn-secondary" href="/faq">Read the FAQ</a>
+          <a class="btn-solid" href="/contact?topic=quote">
+            Request a quote
+          </a>
+          <a class="btn-secondary" href="/faq">
+            Read the FAQ
+          </a>
         </div>
       </div>
     </div>

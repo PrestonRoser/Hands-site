@@ -35,14 +35,16 @@ const ROLES = [
         <p class="kicker">Contact</p>
         <h1 class="h1">Let's talk about your classroom</h1>
         <p class="lead">
-          Tell us a little about your setting and we will get back to you by email within
-          1–2 business days.
+          Tell us a little about your setting and we will get back to you by email within 1–2
+          business days.
         </p>
 
         <dl class="contact-facts">
           <div>
             <dt>Email</dt>
-            <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
+            <dd>
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            </dd>
           </div>
           <div>
             <dt>Instagram</dt>
@@ -55,8 +57,7 @@ const ROLES = [
         </dl>
 
         <p class="muted contact-note">
-          Buying for a school or district? We can provide a W-9 and accept purchase
-          orders.
+          Buying for a school or district? We can provide a W-9 and accept purchase orders.
         </p>
       </div>
 
@@ -64,14 +65,18 @@ const ROLES = [
         <label class="field">
           <span>What is this about?</span>
           <select class="select" name="topic" id="topic">
-            {TOPICS.map((t) => <option value={t.value}>{t.label}</option>)}
+            {TOPICS.map((t) => (
+              <option value={t.value}>{t.label}</option>
+            ))}
           </select>
         </label>
 
         <label class="field">
           <span>Your role</span>
           <select class="select" name="role">
-            {ROLES.map((r) => <option value={r.value}>{r.label}</option>)}
+            {ROLES.map((r) => (
+              <option value={r.value}>{r.label}</option>
+            ))}
           </select>
         </label>
 
@@ -86,7 +91,9 @@ const ROLES = [
         </label>
 
         <label class="field">
-          <span>School or organization <span class="optional">(optional)</span></span>
+          <span>
+            School or organization <span class="optional">(optional)</span>
+          </span>
           <input class="input" name="organization" autocomplete="organization" />
         </label>
 
@@ -108,7 +115,9 @@ const ROLES = [
 
         <input type="hidden" name="_subject" value="HANDS website enquiry" />
 
-        <button type="submit" class="btn-solid submit">Send message</button>
+        <button type="submit" class="btn-solid submit">
+          Send message
+        </button>
         <p class="field-hint">We reply by email within 1–2 business days.</p>
       </form>
     </div>

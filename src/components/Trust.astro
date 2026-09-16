@@ -17,31 +17,27 @@ const PROOF = [
   },
 ];
 
-const AUDIENCES = [
-  'Middle to high-school biology programs',
-  'STEM clubs',
-  'Homeschool',
-];
+const AUDIENCES = ['Middle to high-school biology programs', 'STEM clubs', 'Homeschool'];
 ---
 
 <section class="section" style="padding-top:0">
   <h2 class="h2 proof-title">Reviews and pilots</h2>
 
   <div class="stat-grid">
-    {
-      PROOF.map((p) => (
-        <div class="card proof-card">
-          <p class="proof-label muted">{p.label}</p>
-          <p class="h3 proof-value">{p.value}</p>
-          <p class="proof-detail muted">{p.detail}</p>
-        </div>
-      ))
-    }
+    {PROOF.map((p) => (
+      <div class="card proof-card">
+        <p class="proof-label muted">{p.label}</p>
+        <p class="h3 proof-value">{p.value}</p>
+        <p class="proof-detail muted">{p.detail}</p>
+      </div>
+    ))}
   </div>
 
   <div class="audiences">
     <span class="muted">Trusted by</span>
-    {AUDIENCES.map((a) => <span class="pill audience-pill">{a}</span>)}
+    {AUDIENCES.map((a) => (
+      <span class="pill audience-pill">{a}</span>
+    ))}
   </div>
 </section>
 

@@ -5,7 +5,13 @@ import BuyButton from '../../components/BuyButton.astro';
 import WhyWorks from '../../components/WhyWorks.astro';
 import FAQList from '../../components/FAQList.astro';
 import Trust from '../../components/Trust.astro';
-import { listKits, listLessonsForKit, formatPrice, formatRange, statusLabel } from '../../lib/catalog';
+import {
+  listKits,
+  listLessonsForKit,
+  formatPrice,
+  formatRange,
+  statusLabel,
+} from '../../lib/catalog';
 import { site, features, platformUrl } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -39,9 +45,7 @@ if (kit.price?.amount != null) {
     price: kit.price.amount,
     priceCurrency: kit.price.currency,
     availability:
-      kit.status === 'available'
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/PreOrder',
+      kit.status === 'available' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
     url: kit.purchase.etsyUrl ?? new URL(kit.href, site.url).href,
   };
 }
@@ -67,7 +71,9 @@ const breadcrumbLd = {
     <div class="container">
       <nav class="crumbs" aria-label="Breadcrumb">
         <ol>
-          <li><a href="/kits">Kits</a></li>
+          <li>
+            <a href="/kits">Kits</a>
+          </li>
           <li aria-current="page">{kit.name}</li>
         </ol>
       </nav>
@@ -75,63 +81,54 @@ const breadcrumbLd = {
       <div class="pdp-top">
         <div class="pdp-media" data-gallery>
           <div class="pdp-stage">
-            {
-              kit.images.map((img, i) => (
-                <div class:list={['stage-item', i === 0 && 'is-active']} data-stage-index={i}>
-                  {typeof img.src === 'string' ? (
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      class="hero-img"
-                      loading="eager"
-                    />
-                  ) : (
-                    <Image
-                      src={img.src}
-                      alt={img.alt}
-                      class="hero-img"
-                      width={900}
-                      widths={[420, 640, 900]}
-                      sizes="(min-width: 960px) 440px, 92vw"
-                      loading="eager"
-                      fetchpriority={i === 0 ? 'high' : 'low'}
-                    />
-                  )}
-                </div>
-              ))
-            }
+            {kit.images.map((img, i) => (
+              <div class:list={['stage-item', i === 0 && 'is-active']} data-stage-index={i}>
+                {typeof img.src === 'string' ? (
+                  <img src={img.src} alt={img.alt} class="hero-img" loading="eager" />
+                ) : (
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    class="hero-img"
+                    width={900}
+                    widths={[420, 640, 900]}
+                    sizes="(min-width: 960px) 440px, 92vw"
+                    loading="eager"
+                    fetchpriority={i === 0 ? 'high' : 'low'}
+                  />
+                )}
+              </div>
+            ))}
           </div>
 
-          {
-            kit.images.length > 1 && (
-              <ul class="thumbs">
-                {kit.images.map((img, i) => (
-                  <li>
-                    <button
-                      type="button"
-                      class:list={['thumb', i === 0 && 'is-active']}
-                      data-thumb-index={i}
-                      aria-pressed={i === 0}
-                      aria-label={`Show photo ${i + 1} of ${kit.images.length}`}
-                    >
-                      {typeof img.src === 'string' ? (
-                        <img src={img.src} alt="" loading="lazy" />
-                      ) : (
-                        <Image
-                          src={img.src}
-                          alt=""
-                          width={480}
-                          widths={[240, 480]}
-                          sizes="(min-width: 640px) 160px, 120px"
-                          loading="lazy"
-                        />
-                      )}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )
-          }
+          {kit.images.length > 1 && (
+            <ul class="thumbs">
+              {kit.images.map((img, i) => (
+                <li>
+                  <button
+                    type="button"
+                    class:list={['thumb', i === 0 && 'is-active']}
+                    data-thumb-index={i}
+                    aria-pressed={i === 0}
+                    aria-label={`Show photo ${i + 1} of ${kit.images.length}`}
+                  >
+                    {typeof img.src === 'string' ? (
+                      <img src={img.src} alt="" loading="lazy" />
+                    ) : (
+                      <Image
+                        src={img.src}
+                        alt=""
+                        width={480}
+                        widths={[240, 480]}
+                        sizes="(min-width: 640px) 160px, 120px"
+                        loading="lazy"
+                      />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div class="pdp-buy">
@@ -142,216 +139,199 @@ const breadcrumbLd = {
 
           <div class="pdp-badges">
             <span
-              class:list={[
-                'badge',
-                kit.status === 'available' ? 'badge-available' : 'badge-dev',
-              ]}
+              class:list={['badge', kit.status === 'available' ? 'badge-available' : 'badge-dev']}
             >
               {statusLabel(kit.status)}
             </span>
-            {kit.gradeBands.map((g) => <span class="badge">{g}</span>)}
+            {kit.gradeBands.map((g) => (
+              <span class="badge">{g}</span>
+            ))}
             {kit.ageMin && <span class="badge">Ages {kit.ageMin}+</span>}
           </div>
 
-          <p class="pdp-price">{price ?? (purchasable ? 'See current price on Etsy' : 'Not yet available')}</p>
+          <p class="pdp-price">
+            {price ?? (purchasable ? 'See current price on Etsy' : 'Not yet available')}
+          </p>
 
           <BuyButton kit={kit} />
 
           <dl class="pdp-facts">
-            {
-              duration && (
-                <div>
-                  <dt>Activity length</dt>
-                  <dd>{duration}</dd>
-                </div>
-              )
-            }
-            {
-              groupSize && (
-                <div>
-                  <dt>Works well for</dt>
-                  <dd>{groupSize} per kit</dd>
-                </div>
-              )
-            }
-            {
-              kit.standards.length > 0 && (
-                <div>
-                  <dt>Designed to support</dt>
-                  <dd>{kit.standards.join(', ')}</dd>
-                </div>
-              )
-            }
+            {duration && (
+              <div>
+                <dt>Activity length</dt>
+                <dd>{duration}</dd>
+              </div>
+            )}
+            {groupSize && (
+              <div>
+                <dt>Works well for</dt>
+                <dd>{groupSize} per kit</dd>
+              </div>
+            )}
+            {kit.standards.length > 0 && (
+              <div>
+                <dt>Designed to support</dt>
+                <dd>{kit.standards.join(', ')}</dd>
+              </div>
+            )}
           </dl>
         </div>
       </div>
     </div>
   </section>
 
-  {
-    (kit.audience.length > 0 || kit.teaches.length > 0) && (
-      <section class="section band" style="padding-block:2.5rem">
-        <div class="container">
-          <div class="grid-2-even" style="align-items:start;gap:2rem">
-            {kit.audience.length > 0 && (
-              <div>
-                <h2 class="h2">Who it's for</h2>
-                <ul class="bullet-list muted">
-                  {kit.audience.map((a) => (
-                    <li>{a}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <WhyWorks variant="inline" />
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    kit.teaches.length > 0 && (
-      <section class="section">
-        <div class="container">
-          <h2 class="h2">What the kit teaches</h2>
-          <div class="feature-grid" style="margin-top:1rem">
-            {kit.teaches.map((t) => (
-              <div class="pill">
-                <strong>{t.term}</strong>
-                <span>{t.detail}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    lessons.length > 0 && (
-      <section class="section" style="padding-top:0">
-        <div class="container">
-          <h2 class="h2">Included learning</h2>
-          <p class="muted lessons-intro">
-            {lessons.length} sequenced lessons ship with this kit, each with learning
-            goals, a guided activity, practice exercises, and reflection questions.
-            {features.platform.enabled
-              ? ' Materials unlock on the HANDS platform with your school licence.'
-              : ' Materials are delivered with your order.'}
-          </p>
-
-          <ol class="lesson-list">
-            {lessons.map((lesson, i) => (
-              <li class="lesson card">
-                <span class="lesson-num" aria-hidden="true">
-                  {i + 1}
-                </span>
-                <div class="lesson-body">
-                  <h3 class="h3">
-                    {lesson.title}
-                    {lesson.advanced && <span class="badge lesson-adv">Advanced</span>}
-                  </h3>
-                  <p class="muted lesson-summary">{lesson.summary}</p>
-                  {lesson.outcomes.length > 0 && (
-                    <details class="lesson-outcomes">
-                      <summary>Learning outcomes</summary>
-                      <ul class="bullet-list muted">
-                        {lesson.outcomes.map((o) => (
-                          <li>{o}</li>
-                        ))}
-                      </ul>
-                    </details>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          {features.platform.enabled && (
-            <p class="lessons-platform">
-              <a class="btn-secondary" href={platformUrl(features.platform.redeemPath)}>
-                Already have a code? Register your school
-              </a>
-            </p>
-          )}
-        </div>
-      </section>
-    )
-  }
-
-  {
-    kit.deepDive.length > 0 && (
-      <section class="section" style="padding-top:0">
-        <div class="container">
-          <h2 class="h2">In the classroom</h2>
-          <div class="deep-dive">
-            {kit.deepDive.map((block) => (
-              <div class="deep-block">
-                <div class:list={['pastel-hr', block.accent]} />
-                <h3 class="h3">{block.title}</h3>
-                <p class="lead deep-body">{block.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    (kit.includes.length > 0 || kit.materials.length > 0) && (
-      <section class="section band" style="padding-block:2.5rem">
-        <div class="container">
-          <div class="grid-2-even" style="align-items:start;gap:2rem">
-            {kit.includes.length > 0 && (
-              <div>
-                <h2 class="h2">What's in the box</h2>
-                <ul class="bullet-list muted">
-                  {kit.includes.map((item) => (
-                    <li>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {kit.materials.length > 0 && (
-              <div>
-                <h2 class="h2">Materials and care</h2>
-                <ul class="bullet-list muted">
-                  {kit.materials.map((item) => (
-                    <li>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    kit.learningOutcomes.length > 0 && (
-      <section class="section">
-        <div class="container">
-          <div class="grid-2-even" style="align-items:start;gap:2rem">
+  {(kit.audience.length > 0 || kit.teaches.length > 0) && (
+    <section class="section band" style="padding-block:2.5rem">
+      <div class="container">
+        <div class="grid-2-even" style="align-items:start;gap:2rem">
+          {kit.audience.length > 0 && (
             <div>
-              <h2 class="h2">Learning outcomes</h2>
-              <ul class="bullet-list">
-                {kit.learningOutcomes.map((o) => (
-                  <li>{o}</li>
+              <h2 class="h2">Who it's for</h2>
+              <ul class="bullet-list muted">
+                {kit.audience.map((a) => (
+                  <li>{a}</li>
                 ))}
               </ul>
             </div>
-            <div>
-              <h2 class="h2">Common questions</h2>
-              <FAQList mode="compact" />
+          )}
+          <WhyWorks variant="inline" />
+        </div>
+      </div>
+    </section>
+  )}
+
+  {kit.teaches.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2 class="h2">What the kit teaches</h2>
+        <div class="feature-grid" style="margin-top:1rem">
+          {kit.teaches.map((t) => (
+            <div class="pill">
+              <strong>{t.term}</strong>
+              <span>{t.detail}</span>
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {lessons.length > 0 && (
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <h2 class="h2">Included learning</h2>
+        <p class="muted lessons-intro">
+          {lessons.length} sequenced lessons ship with this kit, each with learning goals, a guided
+          activity, practice exercises, and reflection questions.
+          {features.platform.enabled
+            ? ' Materials unlock on the HANDS platform with your school licence.'
+            : ' Materials are delivered with your order.'}
+        </p>
+
+        <ol class="lesson-list">
+          {lessons.map((lesson, i) => (
+            <li class="lesson card">
+              <span class="lesson-num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div class="lesson-body">
+                <h3 class="h3">
+                  {lesson.title}
+                  {lesson.advanced && <span class="badge lesson-adv">Advanced</span>}
+                </h3>
+                <p class="muted lesson-summary">{lesson.summary}</p>
+                {lesson.outcomes.length > 0 && (
+                  <details class="lesson-outcomes">
+                    <summary>Learning outcomes</summary>
+                    <ul class="bullet-list muted">
+                      {lesson.outcomes.map((o) => (
+                        <li>{o}</li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        {features.platform.enabled && (
+          <p class="lessons-platform">
+            <a class="btn-secondary" href={platformUrl(features.platform.redeemPath)}>
+              Already have a code? Register your school
+            </a>
+          </p>
+        )}
+      </div>
+    </section>
+  )}
+
+  {kit.deepDive.length > 0 && (
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <h2 class="h2">In the classroom</h2>
+        <div class="deep-dive">
+          {kit.deepDive.map((block) => (
+            <div class="deep-block">
+              <div class:list={['pastel-hr', block.accent]} />
+              <h3 class="h3">{block.title}</h3>
+              <p class="lead deep-body">{block.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {(kit.includes.length > 0 || kit.materials.length > 0) && (
+    <section class="section band" style="padding-block:2.5rem">
+      <div class="container">
+        <div class="grid-2-even" style="align-items:start;gap:2rem">
+          {kit.includes.length > 0 && (
+            <div>
+              <h2 class="h2">What's in the box</h2>
+              <ul class="bullet-list muted">
+                {kit.includes.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {kit.materials.length > 0 && (
+            <div>
+              <h2 class="h2">Materials and care</h2>
+              <ul class="bullet-list muted">
+                {kit.materials.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {kit.learningOutcomes.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="grid-2-even" style="align-items:start;gap:2rem">
+          <div>
+            <h2 class="h2">Learning outcomes</h2>
+            <ul class="bullet-list">
+              {kit.learningOutcomes.map((o) => (
+                <li>{o}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 class="h2">Common questions</h2>
+            <FAQList mode="compact" />
           </div>
         </div>
-      </section>
-    )
-  }
+      </div>
+    </section>
+  )}
 
   <section class="section" style="padding-top:0">
     <div class="container">
@@ -371,16 +351,14 @@ const breadcrumbLd = {
     </div>
   </section>
 
-  {
-    purchasable && (
-      <div class="sticky-buy">
-        <div class="container sticky-inner">
-          <span class="sticky-name">{kit.name}</span>
-          <BuyButton kit={kit} showQuote={false} showNote={false} />
-        </div>
+  {purchasable && (
+    <div class="sticky-buy">
+      <div class="container sticky-inner">
+        <span class="sticky-name">{kit.name}</span>
+        <BuyButton kit={kit} showQuote={false} showNote={false} />
       </div>
-    )
-  }
+    </div>
+  )}
 </Layout>
 
 <script>

@@ -48,8 +48,6 @@ const imageUrl = new URL(image, site.url).href;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={imageUrl} />
 
-{
-  jsonLd.map((data) => (
-    <script type="application/ld+json" set:html={JSON.stringify(data)} />
-  ))
-}
+{jsonLd.map((data) => (
+  <script type="application/ld+json" set:html={JSON.stringify(data)}></script>
+))}

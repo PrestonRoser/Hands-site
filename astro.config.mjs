@@ -1,7 +1,7 @@
 // @ts-check
-import { defineConfig } from 'astro/config'
-import tailwindcss from '@tailwindcss/vite'
-import sitemap from '@astrojs/sitemap'
+import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // Required for canonical URLs, sitemap generation, and absolute OG image paths.
@@ -16,4 +16,4 @@ export default defineConfig({
   },
 
   vite: { plugins: [tailwindcss()] },
-})
+});

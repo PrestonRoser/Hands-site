@@ -11,19 +11,19 @@ const STATS = [
     <h2 class="h2 trust-title">Early traction</h2>
 
     <div class="stat-grid">
-      {
-        STATS.map((s) => (
-          <div class="card stat-card">
-            <p class="stat-label muted">{s.label}</p>
-            <p class="h3 stat-value">{s.value}</p>
-            <p class="stat-detail muted">{s.detail}</p>
-          </div>
-        ))
-      }
+      {STATS.map((s) => (
+        <div class="card stat-card">
+          <p class="stat-label muted">{s.label}</p>
+          <p class="h3 stat-value">{s.value}</p>
+          <p class="stat-detail muted">{s.detail}</p>
+        </div>
+      ))}
     </div>
 
     <p class="trust-more">
-      <a class="btn-link" href="/venture">View timeline and updates</a>
+      <a class="btn-link" href="/venture">
+        View timeline and updates
+      </a>
     </p>
   </div>
 </section>
