@@ -1,6 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import BuyButton from './BuyButton.astro';
 import { getFeaturedKit, listLessonsForKit, formatRange } from '../lib/catalog';
 
 /**
@@ -14,54 +13,52 @@ const duration = kit ? formatRange(kit.activityMinutes, 'minute') : null;
 const image = kit?.images[0];
 ---
 
-{
-  kit && (
-    <section class="section band">
-      <div class="container feature-layout">
-        <div class="feature-media">
-          {image &&
-            (typeof image.src === 'string' ? (
-              <img src={image.src} alt={image.alt} loading="lazy" />
-            ) : (
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={860}
-                widths={[420, 640, 860]}
-                sizes="(min-width: 960px) 460px, 92vw"
-                loading="lazy"
-              />
-            ))}
-        </div>
+{kit && (
+  <section class="section band">
+    <div class="container feature-layout">
+      <div class="feature-media">
+        {image &&
+          (typeof image.src === 'string' ? (
+            <img src={image.src} alt={image.alt} loading="lazy" />
+          ) : (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={860}
+              widths={[420, 640, 860]}
+              sizes="(min-width: 960px) 460px, 92vw"
+              loading="lazy"
+            />
+          ))}
+      </div>
 
-        <div class="feature-copy">
-          <p class="kicker">Featured kit</p>
-          <h2 class="h2 feature-name">{kit.name}</h2>
-          <p class="lead feature-summary">{kit.summary}</p>
+      <div class="feature-copy">
+        <p class="kicker">Featured kit</p>
+        <h2 class="h2 feature-name">{kit.name}</h2>
+        <p class="lead feature-summary">{kit.summary}</p>
 
-          <ul class="bullet-list muted feature-points">
-            {duration && <li>Teacher-ready activities, {duration} blocks</li>}
-            {kit.standards.length > 0 && <li>Designed to support {kit.standards.join(', ')}</li>}
-            {lessons.length > 0 && (
-              <li>
-                {lessons.length} sequenced lessons with guided activities and reflection questions
-              </li>
-            )}
-          </ul>
+        <ul class="bullet-list muted feature-points">
+          {duration && <li>Teacher-ready activities, {duration} blocks</li>}
+          {kit.standards.length > 0 && <li>Designed to support {kit.standards.join(', ')}</li>}
+          {lessons.length > 0 && (
+            <li>
+              {lessons.length} sequenced lessons with guided activities and reflection questions
+            </li>
+          )}
+        </ul>
 
-          <div class="feature-actions">
-            <a class="btn-solid" href={kit.href}>
-              View the kit
-            </a>
-            <a class="btn-secondary" href="/kits">
-              All kits
-            </a>
-          </div>
+        <div class="feature-actions">
+          <a class="btn-solid" href={kit.href}>
+            View the kit
+          </a>
+          <a class="btn-secondary" href="/kits">
+            All kits
+          </a>
         </div>
       </div>
-    </section>
-  )
-}
+    </div>
+  </section>
+)}
 
 <style>
   .feature-layout {
