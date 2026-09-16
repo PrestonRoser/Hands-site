@@ -46,6 +46,13 @@ coverage
 *.lcov
 .nyc_output
 
+# test artifacts
+playwright-report/
+test-results/
+.lighthouseci/
+blob-report/
+.playwright/
+
 # environment variables
 .env
 .env.*
