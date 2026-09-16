@@ -240,9 +240,7 @@ export function formatPrice(price: Money | null): string | null {
 
 export function formatRange(range: Range | null, unit: string): string | null {
   if (!range) return null;
-  return range.min === range.max
-    ? `${range.min} ${unit}`
-    : `${range.min}–${range.max} ${unit}`;
+  return range.min === range.max ? `${range.min} ${unit}` : `${range.min}–${range.max} ${unit}`;
 }
 
 export function statusLabel(status: KitStatus): string {

@@ -1,8 +1,7 @@
 # HANDS — handslearning.com
 
 The public marketing and commerce site for **HANDS Learning**: tactile, classroom-ready
-STEM kits for K-12. Built with Astro and Tailwind CSS, deployed on Vercel behind
-Cloudflare DNS.
+STEM kits for K-12. Built with Astro and Tailwind CSS.
 
 This repo is the brand and commerce layer. The authenticated learning platform
 (curriculum delivery, rosters, progress) lives in a separate repo and will be served from
@@ -10,21 +9,30 @@ This repo is the brand and commerce layer. The authenticated learning platform
 
 ## Tech stack
 
-| Layer | Choice |
-|---|---|
-| Framework | [Astro](https://astro.build) (static output) |
-| Styling | Tailwind CSS v4 + design tokens in `src/styles/global.css` |
-| Content | Astro content collections (`src/content/`) |
-| Fonts | Self-hosted Manrope + Inter (variable, woff2) |
-| Hosting | Vercel, DNS via Cloudflare |
+| Layer     | Choice                                                     |
+| --------- | ---------------------------------------------------------- |
+| Framework | [Astro](https://astro.build) (static output)               |
+| Styling   | Tailwind CSS v4 + design tokens in `src/styles/global.css` |
+| Content   | Astro content collections (`src/content/`)                 |
+| Fonts     | Self-hosted Manrope + Inter (variable, woff2)              |
+| Node      | 22 (see `.nvmrc`)                                          |
+| Hosting   | Vercel today; migrating to Cloudflare Workers              |
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
-npm run build      # static build into dist/
-npm run preview    # serve the built site
+npm run dev          # http://localhost:4321
+npm run build        # static build into dist/
+npm run preview      # serve the built site
+```
+
+Before opening a pull request:
+
+```bash
+npm run check        # astro check — types and content schema
+npm run format:check # prettier, same check CI runs
+npm run build        # must pass
 ```
 
 ## Project structure
@@ -40,8 +48,9 @@ src/
 │   ├── commerce.ts        # purchase channel resolution (Etsy today)
 │   └── site.ts            # brand constants, links, feature flags
 ├── components/
-├── layouts/Layout.astro   # shell, SEO, skip link, fonts
+├── layouts/Layout.astro   # shell, SEO, skip link, fonts, icons
 ├── pages/
+│   ├── 404.astro          # required for the edge 404 handler
 │   ├── kits/index.astro   # catalog listing
 │   └── kits/[slug].astro  # kit detail, generated per catalog entry
 └── styles/global.css      # tokens, components, utilities
@@ -73,6 +82,9 @@ inert until a Stripe account exists; see `src/lib/commerce.ts` for the three-ste
 The platform licence is always a separate line item from kit hardware, never bundled into
 the kit price.
 
+When checkout does ship, it will use Stripe-hosted Checkout so no card data ever reaches
+this application. See [SECURITY.md](SECURITY.md).
+
 ## Feature flags
 
 `src/lib/site.ts` has `features.platform.enabled`, which is `false` until
@@ -82,11 +94,28 @@ the kit price.
 ## Images
 
 Source images live in `src/assets/images/` and are optimized at build time into responsive
-WebP. Keep sources web-ready (long edge ≤ 2400px) — full-resolution camera masters get
-copied into the build output verbatim and bloat deploys.
+WebP. Keep sources web-ready (long edge ≤ 2400px) and cropped to their subject — full
+resolution camera masters get copied into the build output verbatim and bloat deploys.
+Masters stay out of the repo.
 
-Files in `public/` are served as-is and are not optimized: use it only for the favicon,
-SVG icons, fonts, and the social preview image.
+Files in `public/` are served as-is and are not optimized: use it only for icons, fonts,
+the web manifest, and the social preview image.
+
+## Branches
+
+Changes flow **`dev` → `qa` → `main`**:
+
+| Branch | Purpose                                                |
+| ------ | ------------------------------------------------------ |
+| `dev`  | Integration branch. Feature branches merge here first. |
+| `qa`   | Staging. What Esteban and pilot teachers review.       |
+| `main` | Production.                                            |
+
+Urgent fixes may branch as `hotfix/*` and target `qa` or `main` directly, then merge back
+down. Every pull request uses the template in `.github/` and needs a review.
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org):
+`feat(kits): …`, `fix(styles): …`, `chore(repo): …`.
 
 ## Conventions
 
@@ -96,11 +125,19 @@ SVG icons, fonts, and the social preview image.
 - Pages using full-bleed `.band` sections must pass `contained={false}` to `Layout`.
 - WCAG 2.2 AA is the build standard: visible focus, one `h1` per page, alt text on every
   image, no colour-only status.
+- This repository is **public**. No secrets, tokens, or `.env` contents in a commit.
 
 ## Deployment
 
 Push to `main`; Vercel builds and deploys. Domain is managed in Cloudflare DNS with a CNAME
 to `cname.vercel-dns.com`.
+
+A migration to Cloudflare Workers is in progress — deploys will move to GitHub Actions with
+`qa` and `main` mapping to separate Workers.
+
+## Security
+
+Report vulnerabilities per [SECURITY.md](SECURITY.md). Do not open a public issue.
 
 ## Contributors
 

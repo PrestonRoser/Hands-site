@@ -19,23 +19,22 @@ const REASONS = [
   <div class="container">
     <h2 class="h2">Why HANDS</h2>
     <p class="muted why-intro">
-      Abstract science is hard to hold onto. Physical models give students something to
-      reason with.
+      Abstract science is hard to hold onto. Physical models give students something to reason with.
     </p>
 
     <div class="grid-3 why-grid">
-      {
-        REASONS.map((r) => (
-          <div class="card why-card">
-            <h3 class="h3">{r.title}</h3>
-            <p class="muted why-body">{r.body}</p>
-          </div>
-        ))
-      }
+      {REASONS.map((r) => (
+        <div class="card why-card">
+          <h3 class="h3">{r.title}</h3>
+          <p class="muted why-body">{r.body}</p>
+        </div>
+      ))}
     </div>
 
     <p class="why-more">
-      <a class="btn-link" href="/research">See the research behind hands-on learning</a>
+      <a class="btn-link" href="/research">
+        See the research behind hands-on learning
+      </a>
     </p>
   </div>
 </section>

@@ -52,87 +52,73 @@ function groupActive(item: NavItem): boolean {
   <div class="nav-inner container">
     <div class="brand">
       <a href="/" aria-label={`${site.name} — Home`}>
-        <img
-          src={site.logo}
-          alt=""
-          class="logo"
-          width="22"
-          height="22"
-          decoding="async"
-        />
+        <img src={site.logo} alt="" class="logo" width="22" height="22" decoding="async" />
         <span>{site.name}</span>
       </a>
     </div>
 
     <nav class="nav-center" aria-label="Primary">
       <ul class="nav-list">
-        {
-          NAV.map((item) =>
-            item.children ? (
-              <li class="nav-item has-menu">
-                <button
-                  type="button"
-                  class="nav-trigger"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  data-menu-trigger
-                  data-current={groupActive(item) ? 'true' : undefined}
+        {NAV.map((item) =>
+          item.children ? (
+            <li class="nav-item has-menu">
+              <button
+                type="button"
+                class="nav-trigger"
+                aria-expanded="false"
+                aria-haspopup="true"
+                data-menu-trigger
+                data-current={groupActive(item) ? 'true' : undefined}
+              >
+                {item.label}
+                <svg
+                  class="chev"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  aria-hidden="true"
                 >
-                  {item.label}
-                  <svg
-                    class="chev"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    aria-hidden="true"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </button>
-                <ul class="nav-menu" data-menu-panel hidden>
-                  {item.children.map((child) => (
-                    <li>
-                      <a
-                        href={child.href}
-                        aria-current={isActive(child.href) ? 'page' : undefined}
-                      >
-                        <span class="menu-label">{child.label}</span>
-                        {child.description && (
-                          <span class="menu-desc">{child.description}</span>
-                        )}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ) : (
-              <li class="nav-item">
-                <a
-                  class="nav-anchor"
-                  href={item.href}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ),
-          )
-        }
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+              <ul class="nav-menu" data-menu-panel hidden>
+                {item.children.map((child) => (
+                  <li>
+                    <a href={child.href} aria-current={isActive(child.href) ? 'page' : undefined}>
+                      <span class="menu-label">{child.label}</span>
+                      {child.description && <span class="menu-desc">{child.description}</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li class="nav-item">
+              <a
+                class="nav-anchor"
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ),
+        )}
       </ul>
     </nav>
 
     <div class="nav-actions">
-      {
-        features.platform.enabled && (
-          <a class="btn-ghost sign-in" href={platformUrl(features.platform.signInPath)}>
-            Sign in
-          </a>
-        )
-      }
-      <a class="btn-solid nav-cta" href="/kits/dna-rna-assembly-kit">Get the kit</a>
+      {features.platform.enabled && (
+        <a class="btn-ghost sign-in" href={platformUrl(features.platform.signInPath)}>
+          Sign in
+        </a>
+      )}
+      <a class="btn-solid nav-cta" href="/kits/dna-rna-assembly-kit">
+        Get the kit
+      </a>
 
       <details class="menu">
         <summary class="icon-btn focus-ring" aria-label="Open menu">
@@ -145,42 +131,37 @@ function groupActive(item: NavItem): boolean {
             stroke-width="2"
             aria-hidden="true"
           >
-            <path d="M3 6h18M3 12h18M3 18h18" />
+            <path d="M3 6h18M3 12h18M3 18h18"></path>
           </svg>
         </summary>
         <div class="sheet">
           <nav aria-label="Mobile">
             <ul class="sheet-list">
-              {
-                NAV.map((item) =>
-                  item.children ? (
-                    <li class="sheet-group">
-                      <p class="sheet-group-title">{item.label}</p>
-                      <ul>
-                        {item.children.map((child) => (
-                          <li>
-                            <a
-                              href={child.href}
-                              aria-current={isActive(child.href) ? 'page' : undefined}
-                            >
-                              {child.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ) : (
-                    <li>
-                      <a
-                        href={item.href}
-                        aria-current={isActive(item.href) ? 'page' : undefined}
-                      >
-                        {item.label}
-                      </a>
-                    </li>
-                  ),
-                )
-              }
+              {NAV.map((item) =>
+                item.children ? (
+                  <li class="sheet-group">
+                    <p class="sheet-group-title">{item.label}</p>
+                    <ul>
+                      {item.children.map((child) => (
+                        <li>
+                          <a
+                            href={child.href}
+                            aria-current={isActive(child.href) ? 'page' : undefined}
+                          >
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ) : (
+                  <li>
+                    <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                      {item.label}
+                    </a>
+                  </li>
+                ),
+              )}
               <li class="sheet-group">
                 <p class="sheet-group-title">Connect</p>
                 <ul>
@@ -189,10 +170,13 @@ function groupActive(item: NavItem): boolean {
                       <a href={platformUrl(features.platform.signInPath)}>Sign in</a>
                     </li>
                   )}
-                  <li><a href={`mailto:${contact.email}`}>Email us</a></li>
+                  <li>
+                    <a href={`mailto:${contact.email}`}>Email us</a>
+                  </li>
                   <li>
                     <a href={contact.instagram} target="_blank" rel="noopener">
-                      Instagram
+                      {' '}
+                      Instagram{' '}
                     </a>
                   </li>
                 </ul>

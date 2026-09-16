@@ -3,23 +3,33 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@tailwindcss/vite": "^4.1.14",
     "astro": "^5.15.9",
     "prettier": "^3.3.3",
-    "prettier-plugin-astro": "^0.14.0",
-    "tailwindcss": "^4.1.14"
+    "prettier-plugin-astro": "^1.0.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4"
   },
-  "description": "Marketing and commerce site for HANDS Learning (handslearning.com)"
+  "description": "Marketing and commerce site for HANDS Learning (handslearning.com)",
+  "overrides": {
+    "vite": "$vite"
+  }
 }

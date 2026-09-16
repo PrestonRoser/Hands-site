@@ -15,34 +15,34 @@ const { kit, showQuote = true, showNote = true, align = 'start' } = Astro.props;
 
 const primary = getPurchaseAction(kit);
 const quote = showQuote ? getQuoteAction(kit) : null;
-const external = primary.external
-  ? { target: '_blank', rel: 'noopener' }
-  : {};
+const external = primary.external ? { target: '_blank', rel: 'noopener' } : {};
 ---
 
 <div class="buy" data-align={align}>
   <div class="buy-actions">
     <a class="btn-solid" href={primary.href} {...external}>
       {primary.label}
-      {
-        primary.external && (
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-          >
-            <path d="M7 17L17 7M17 7H9M17 7v8" />
-          </svg>
-        )
-      }
+      {primary.external && (
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="M7 17L17 7M17 7H9M17 7v8" />
+        </svg>
+      )}
       {primary.external && <span class="sr-only">(opens in a new tab)</span>}
     </a>
 
-    {quote && <a class="btn-secondary" href={quote.href}>{quote.label}</a>}
+    {quote && (
+      <a class="btn-secondary" href={quote.href}>
+        {quote.label}
+      </a>
+    )}
   </div>
 
   {showNote && primary.note && <p class="buy-note">{primary.note}</p>}

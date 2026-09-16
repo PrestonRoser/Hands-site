@@ -78,9 +78,7 @@ const kits = defineCollection({
       includes: z.array(z.string()).default([]),
       materials: z.array(z.string()).default([]),
       /** Short "what this teaches" pills. */
-      teaches: z
-        .array(z.object({ term: z.string(), detail: z.string() }))
-        .default([]),
+      teaches: z.array(z.object({ term: z.string(), detail: z.string() })).default([]),
       learningOutcomes: z.array(z.string()).default([]),
       /**
        * Long-form narrative about classroom fit on the kit detail page.

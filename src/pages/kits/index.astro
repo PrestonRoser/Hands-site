@@ -44,9 +44,9 @@ const jsonLd = [
       <p class="kicker">Kits</p>
       <h1 class="h1">Classroom kits you can put in students' hands</h1>
       <p class="lead intro">
-        Every HANDS kit pairs durable, reusable parts with teacher-ready activities that
-        fit a normal class period. Start with the DNA &amp; RNA Assembly Kit, built and
-        refined across classroom pilots.
+        Every HANDS kit pairs durable, reusable parts with teacher-ready activities that fit a
+        normal class period. Start with the DNA &amp; RNA Assembly Kit, built and refined across
+        classroom pilots.
       </p>
     </div>
   </section>
@@ -60,18 +60,16 @@ const jsonLd = [
         ))}
       </div>
 
-      {
-        upcoming.length > 0 && (
-          <div class="upcoming-block">
-            <h2 class="upcoming-title">Also in development</h2>
-            <div class="upcoming-list">
-              {upcoming.map((kit) => (
-                <KitCard kit={kit} />
-              ))}
-            </div>
+      {upcoming.length > 0 && (
+        <div class="upcoming-block">
+          <h2 class="upcoming-title">Also in development</h2>
+          <div class="upcoming-list">
+            {upcoming.map((kit) => (
+              <KitCard kit={kit} />
+            ))}
           </div>
-        )
-      }
+        </div>
+      )}
     </div>
   </section>
 
@@ -83,8 +81,12 @@ const jsonLd = [
           We provide classroom bundles, educator pricing, W-9s, and purchase orders.
         </p>
         <div class="cta-actions">
-          <a class="btn-solid" href="/contact?topic=quote">Request a quote</a>
-          <a class="btn-secondary" href="/educators">For educators</a>
+          <a class="btn-solid" href="/contact?topic=quote">
+            Request a quote
+          </a>
+          <a class="btn-secondary" href="/educators">
+            For educators
+          </a>
         </div>
       </div>
     </div>
