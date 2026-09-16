@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import fullKit from '../assets/images/full-kit.jpg';
+import helixCloseup from '../assets/images/dna-helix-closeup.jpg';
 ---
 
 <section class="section hero">
@@ -27,19 +27,54 @@ import fullKit from '../assets/images/full-kit.jpg';
     </div>
 
     <div class="hero-media">
-      <Image
-        src={fullKit}
-        alt="The complete HANDS DNA and RNA Assembly Kit with colour-coded pieces laid out"
-        class="hero-img"
-        width={1100}
-        widths={[480, 768, 1100]}
-        sizes="(min-width: 960px) 520px, 94vw"
-        loading="eager"
-        fetchpriority="high"
-      />
+      <div class="hero-art" data-hero-art>
+        <Image
+          src={helixCloseup}
+          alt="Close-up of a colour-coded DNA double helix model built from HANDS kit pieces"
+          class="hero-art-img"
+          width={1280}
+          widths={[480, 768, 1024, 1280]}
+          sizes="(min-width: 960px) 520px, 78vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  // Product shot fades and drifts as the page scrolls, the way a hardware
+  // landing page hands the viewport over to the next section. Driven from a
+  // single custom property so the CSS owns the look and this only reports
+  // progress. Left at 0 when reduced motion is requested, which keeps the
+  // image at full opacity rather than animating it away.
+  const art = document.querySelector<HTMLElement>('[data-hero-art]');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (art && !still.matches) {
+    let queued = false;
+
+    const apply = () => {
+      queued = false;
+      // Hold at full opacity for the first stretch of scroll, then fade over
+      // most of a viewport height, so the image lingers instead of blinking out.
+      const hold = window.innerHeight * 0.12;
+      const distance = window.innerHeight * 1.15;
+      const progress = Math.min(1, Math.max(0, (window.scrollY - hold) / distance));
+      art.style.setProperty('--hero-progress', progress.toFixed(3));
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(apply);
+    };
+
+    apply();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>
 
 <style>
   .hero-grid {
@@ -51,9 +86,46 @@ import fullKit from '../assets/images/full-kit.jpg';
 
   @media (min-width: 960px) {
     .hero-grid {
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1fr 1.05fr;
       gap: 3rem;
     }
+  }
+
+  /* The mask sits on the unrotated wrapper so the fade runs toward the
+     screen's bottom and bottom-left, not along the tilted image's own axes.
+     Two gradients intersected: one fades the bottom, one eats the
+     bottom-left corner. */
+  .hero-art {
+    --hero-progress: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: 620px;
+    margin-inline: auto;
+    aspect-ratio: 1 / 1.05;
+    opacity: calc(1 - var(--hero-progress));
+    -webkit-mask-image:
+      linear-gradient(to bottom, #000 40%, transparent 94%),
+      linear-gradient(to top right, transparent 10%, #000 52%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, #000 40%, transparent 94%),
+      linear-gradient(to top right, transparent 10%, #000 52%);
+    mask-composite: intersect;
+  }
+
+  /* Sized so the rotated 4:5 frame's bounding box stays inside the wrapper;
+     anything outside it would be clipped by the mask. At 72% width and a 4:5
+     ratio the rotated box is 1.25·cos(a) + sin(a) tall, which exceeds the
+     wrapper's 1.05 past roughly 14deg — hence the shallower tilt here. */
+  .hero-art :global(.hero-art-img) {
+    width: 72%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 24px;
+    transform: rotate(-12deg) translateY(calc(var(--hero-progress) * -56px))
+      scale(calc(1 - var(--hero-progress) * 0.06));
   }
 
   .hero-lead {
