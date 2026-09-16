@@ -1,0 +1,17 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+
+# Self-hosted font binaries and generated icons.
+public/fonts/
+
+# Symlinks into the Obsidian vault — working notes, not site source. Formatting
+# these would rewrite files outside this repo.
+NGSS_Alignment_Crosswalk.md
+NGSS_Alignment_Gaps.md
+
+# Local tooling config, kept out of the repo via .git/info/exclude. Not ours to
+# reformat.
+CLAUDE.md
+.claude/
