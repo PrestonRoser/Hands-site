@@ -13,16 +13,16 @@
   },
   "images": [
     {
-      "src": "../../assets/images/assembled-kit.jpg",
-      "alt": "Assembled DNA and RNA model built from the HANDS kit"
+      "src": "../../assets/images/dna-kit-boxes-and-model.jpg",
+      "alt": "Two HANDS DNA Assembly kit boxes beside a fully assembled, colour-coded DNA double helix model"
     },
     {
-      "src": "../../assets/images/full-kit.jpg",
-      "alt": "The complete HANDS DNA and RNA Assembly Kit with all colour-coded pieces laid out"
+      "src": "../../assets/images/dna-kit-box.jpg",
+      "alt": "The HANDS DNA Assembly kit box with its printed double helix and logo lid"
     },
     {
-      "src": "../../assets/images/assembled-student-kit.jpg",
-      "alt": "A student-sized DNA and RNA model assembled on a desk"
+      "src": "../../assets/images/dna-kit-long-box.jpg",
+      "alt": "The long HANDS DNA Assembly kit box, closed, on a white surface"
     }
   ],
   "subjects": ["Biology", "Genetics", "Molecular Biology"],

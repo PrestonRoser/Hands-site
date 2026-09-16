@@ -11,7 +11,7 @@ import { getFeaturedKit, listLessonsForKit, formatRange } from '../lib/catalog';
 const kit = await getFeaturedKit();
 const lessons = kit ? await listLessonsForKit(kit.slug) : [];
 const duration = kit ? formatRange(kit.activityMinutes, 'minute') : null;
-const image = kit?.images[2] ?? kit?.images[0];
+const image = kit?.images[0];
 ---
 
 {
