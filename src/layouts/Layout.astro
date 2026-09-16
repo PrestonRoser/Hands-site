@@ -43,23 +43,15 @@ const fullTitle = brandSuffix ? `${title} — ${site.name}` : title;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.png" />
+    <link rel="icon" href="/favicon.png" sizes="any" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#2563eb" />
 
     <!-- Self-hosted fonts: preload the two faces used above the fold. -->
-    <link
-      rel="preload"
-      href="/fonts/manrope-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/inter-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <SEO
       title={fullTitle}
@@ -71,22 +63,22 @@ const fullTitle = brandSuffix ? `${title} — ${site.name}` : title;
     />
   </head>
   <body class="min-h-dvh">
-    <a class="skip-link" href="#main">Skip to main content</a>
+    <a class="skip-link" href="#main">
+      Skip to main content
+    </a>
 
     <div class="nav-wrap">
       <Navbar />
     </div>
 
     <main id="main">
-      {
-        contained ? (
-          <div class="container">
-            <slot />
-          </div>
-        ) : (
+      {contained ? (
+        <div class="container">
           <slot />
-        )
-      }
+        </div>
+      ) : (
+        <slot />
+      )}
     </main>
 
     <Footer />
