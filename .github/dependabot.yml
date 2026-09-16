@@ -8,6 +8,18 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Majors on these three are never a routine bump:
+    #   astro      — a framework major is a deliberate, tested migration
+    #   vite       — must stay on the major astro itself depends on, or the
+    #                Plugin types conflict and `astro check` fails
+    #   typescript — must satisfy @astrojs/check's peer range (^5 || ^6)
+    ignore:
+      - dependency-name: astro
+        update-types: ['version-update:semver-major']
+      - dependency-name: vite
+        update-types: ['version-update:semver-major']
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     groups:
       astro:
         patterns:
