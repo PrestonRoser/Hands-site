@@ -26,7 +26,7 @@
     "vite": "^6.4.3"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.4"
+    "@astrojs/sitemap": "^3.7.5"
   },
   "description": "Marketing and commerce site for HANDS Learning (handslearning.com)",
   "overrides": {
